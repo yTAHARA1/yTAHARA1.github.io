@@ -16,7 +16,8 @@ import {
     deleteDoc, 
     updateDoc, 
     query, 
-    orderBy 
+    orderBy,
+    onSnapshot 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // ====== ESTADO GLOBAL ======
@@ -211,12 +212,12 @@ async function carregarProjetosPublicos() {
 }
 
 // ====== RENDERIZAR Q&A PÚBLICO ======
-async function carregarQnAPublico() {
+function carregarQnAPublico() {
     const lista = document.getElementById("qna-public-lista");
     if(!lista) return;
 
-    try {
-        const snapshot = await getDocs(collection(db, "perguntas"));
+    const q = query(collection(db, "perguntas"));
+    onSnapshot(q, (snapshot) => {
         let html = "";
         let count = 0;
         snapshot.forEach((doc) => {
@@ -240,10 +241,12 @@ async function carregarQnAPublico() {
         } else {
             lista.style.display = "none";
         }
-    } catch (e) {
-        console.error("Erro ao carregar QnA público", e);
-    }
+    }, (error) => {
+        console.error("Erro ao carregar QnA em Tempo Real", error);
+    });
 }
+window.carregarQnAPublico = carregarQnAPublico;
+carregarQnAPublico();
 
 // Chamar ao carregar a página
 carregarProjetosPublicos();
@@ -491,7 +494,6 @@ window.deletarUsuario = async (uid) => {
 window.mudarStatusPergunta = async (pid, novoStatus) => {
     try {
         await updateDoc(doc(db, "perguntas", pid), { status: novoStatus });
-        window.carregarQnAPublico();
     } catch(e) { alert("Erro: " + e.message); }
 }
 
@@ -507,9 +509,8 @@ window.responderPergunta = async (pid) => {
             status: "respondida",
             resposta: textarea.value.trim()
         });
-        alert("Resposta publicada com sucesso!");
         carregarTodasPerguntas(); // Atualiza tab admin
-        window.carregarQnAPublico(); // Atualiza feed publico na hora
+        alert("Resposta publicada com sucesso!");
     } catch(e) { alert("Erro ao salvar: " + e.message); }
 }
 
@@ -518,7 +519,6 @@ window.deletarPergunta = async (pid) => {
         try {
             await deleteDoc(doc(db, "perguntas", pid));
             carregarTodasPerguntas();
-            window.carregarQnAPublico();
         } catch(e) { alert("Erro: " + e.message); }
     }
 }

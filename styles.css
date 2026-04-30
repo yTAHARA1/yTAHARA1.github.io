@@ -529,6 +529,24 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     .table-container {
         font-size: 0.8rem;
     }
+
+    /* Ajuste do rodapé / redes sociais */
+    .social-links {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1.5rem;
+    }
+    
+    .social-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px;
+    }
+    
+    .highlight-text {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
 }
 
 /* ========================================================= */
