@@ -3,7 +3,8 @@ import {
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut, 
-    onAuthStateChanged 
+    onAuthStateChanged,
+    sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { 
     collection, 
@@ -123,6 +124,11 @@ authForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("auth-email").value;
     const senha = document.getElementById("auth-senha").value;
+    
+    if (senha.length < 8) {
+        alert("Sua senha precisa ter pelo menos 8 dígitos.");
+        return;
+    }
     
     try {
         if (isRegistering) {
@@ -354,6 +360,7 @@ async function carregarUsuarios() {
                         </select>
                     </td>
                     <td>
+                        <button class="action-btn" style="color:var(--text-bright); border:1px solid var(--border-color); padding:4px 8px; border-radius:4px;" onclick="window.enviarRedefinicaoSenha('${u.email}')">Reset Senha</button>
                         <button class="action-btn delete" onclick="window.deletarUsuario('${id}')">Deletar</button>
                     </td>
                 </tr>
@@ -408,6 +415,15 @@ window.mudarRole = async (uid, novoRole) => {
         await updateDoc(doc(db, "users", uid), { role: novoRole });
         alert("Role atualizada!");
     } catch(e) { alert("Erro: " + e.message); }
+}
+
+window.enviarRedefinicaoSenha = async (emailUsuario) => {
+    if(confirm(`Enviar um link oficial do Google para ${emailUsuario} redefinir sua senha?`)) {
+        try {
+            await sendPasswordResetEmail(auth, emailUsuario);
+            alert("Sucesso! O Firebase enviou um e-mail de redefinição de senha para esse usuário.");
+        } catch(e) { alert("Erro ao enviar: " + e.code); }
+    }
 }
 
 window.deletarUsuario = async (uid) => {
