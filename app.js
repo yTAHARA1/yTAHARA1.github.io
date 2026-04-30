@@ -45,6 +45,24 @@ function showSection(id) {
     }, 100);
 }
 
+// ====== MENU BAR (MOBILE) ======
+const menuToggle = document.getElementById("menu-toggle");
+const navLinksContainer = document.getElementById("nav-links");
+
+if (menuToggle && navLinksContainer) {
+    menuToggle.addEventListener("click", () => {
+        navLinksContainer.classList.toggle("active");
+    });
+    // Fechar menu ao clicar em um link mobile
+    navLinksContainer.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            if(window.innerWidth <= 900) {
+                navLinksContainer.classList.remove("active");
+            }
+        });
+    });
+}
+
 // Navegação customizada para os itens dinâmicos
 navLogin.addEventListener("click", (e) => { e.preventDefault(); showSection('login'); });
 navAdmin.addEventListener("click", (e) => { e.preventDefault(); showSection('admin'); });
