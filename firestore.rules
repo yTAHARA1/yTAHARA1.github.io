@@ -36,11 +36,9 @@ service cloud.firestore {
     }
     
     match /perguntas/{perguntaId} {
-      // Usuário ativo e logado pode fazer perguntas
       allow create: if isRegisteredAndActive();
-      // O autor pode ler a dele. Admin pode ler de todos.
-      allow read: if request.auth.uid == resource.data.uid || isAdmin();
-      // Só Admin pode mudar status ou excluir (ou o próprio usuário pode apagar sua pergunta)
+      // Qualquer pessoa pode LER as perguntas na vitrine pública
+      allow read: if true;
       allow update: if isAdmin();
       allow delete: if request.auth.uid == resource.data.uid || isAdmin();
     }
