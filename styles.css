@@ -435,8 +435,8 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     font-size: 0.9rem;
 }
 .reveal {
-    opacity: 0;
-    transform: translateY(30px);
+    /* opacity: 0; */
+    /* transform: translateY(30px); */
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
@@ -490,4 +490,120 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     .footer-content h2 {
         font-size: 2rem;
     }
+}
+/* Modal Styles (Shared with Admin) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+.modal.active { display: flex; }
+.auth-card {
+    background: var(--bg-card);
+    width: 90%;
+    max-width: 400px;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+.auth-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem; cursor: pointer;
+}
+.modal-tabs {
+    display: flex; gap: 1rem; margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.tab-btn {
+    background: none; border: none;
+    color: var(--text-muted);
+    padding: 0.5rem 0; cursor: pointer;
+    font-weight: 600;
+}
+.tab-btn.active {
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+}
+.auth-form { display: none; }
+.auth-form.active { 
+    display: flex; 
+    flex-direction: column;
+    gap: 1.2rem;
+}
+.auth-form input {
+    background: #0d0d0f;
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--text-bright);
+    outline: none;
+}
+.w-full { width: 100%; }
+
+/* Blog Styles */
+.blog { padding: 8rem 0; background-color: #050505; }
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+.blog-card {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+.blog-card:hover { 
+    border-color: var(--accent);
+    transform: translateY(-5px);
+}
+
+/* Q&A Form */
+.qa-section {
+    background: rgba(0, 255, 136, 0.02);
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    margin-top: 4rem;
+}
+.qa-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.qa-form textarea {
+    background: #0d0d0f;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+    color: var(--text-bright);
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* User Nav */
+.user-profile-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+.btn-small {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444; border: 1px solid #ff4444;
+    padding: 4px 12px; border-radius: 4px;
+    cursor: pointer;
 }
