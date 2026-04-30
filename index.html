@@ -268,6 +268,14 @@
                     if (targetForm) targetForm.classList.add('active');
                 };
             });
+
+            // Evitar recarregamento caso o Firebase falhe ou o script demore
+            const preventReload = function(e) {
+                e.preventDefault();
+                console.log("Formulário interceptado pelo fallback.");
+            };
+            document.getElementById('loginForm').onsubmit = preventReload;
+            document.getElementById('registerForm').onsubmit = preventReload;
         });
     </script>
     <script type="module" src="script.js"></script>

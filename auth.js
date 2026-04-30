@@ -14,21 +14,35 @@ import {
 // Check if user is Admin
 async function checkAdmin(user) {
     if (!user) return false;
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    return userDoc.exists() && userDoc.data().role === 'admin';
+    try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (!userDoc.exists()) {
+            console.warn("Documento de usuário não encontrado no Firestore!");
+            return false;
+        }
+        console.log("Role detectado:", userDoc.data().role);
+        return userDoc.data().role === 'admin';
+    } catch (e) {
+        console.error("Erro ao verificar admin:", e);
+        return false;
+    }
 }
 
 // Redirect based on role
 async function handleRedirection(user) {
     if (!user) return;
     
+    console.log("Checando permissões para:", user.email);
     const isAdmin = await checkAdmin(user);
     const currentPage = window.location.pathname;
     
-    if (isAdmin && !currentPage.includes('admin.html')) {
-        window.location.href = 'admin.html';
-    } else if (!isAdmin && currentPage.includes('admin.html')) {
-        window.location.href = 'index.html';
+    if (isAdmin) {
+        console.log("Acesso Admin confirmado!");
+        if (!currentPage.includes('admin.html')) {
+            window.location.href = 'admin.html';
+        }
+    } else {
+        console.log("Acesso como usuário comum.");
     }
 }
 

@@ -35,25 +35,30 @@ tabBtns.forEach(btn => {
 });
 
 // --- Login / Register Handlers ---
-document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const res = await login(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
-    if (res.success) authModal.classList.remove('active');
-    else alert(res.error);
-});
+function setupAuthHandlers() {
+    document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        console.log("Tentando login...", email);
+        const res = await login(email, pass);
+        if (res.success) window.location.href = 'index.html'; // Forçar recarregamento para checar admin
+        else alert("Erro no login: " + res.error);
+    });
 
-document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const res = await register(
-        document.getElementById('regEmail').value, 
-        document.getElementById('regPassword').value,
-        document.getElementById('regName').value
-    );
-    if (res.success) authModal.classList.remove('active');
-    else alert(res.error);
-});
+    document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const res = await register(
+            document.getElementById('regEmail').value, 
+            document.getElementById('regPassword').value,
+            document.getElementById('regName').value
+        );
+        if (res.success) window.location.href = 'index.html';
+        else alert("Erro no cadastro: " + res.error);
+    });
 
-document.getElementById('logoutNavBtn')?.addEventListener('click', logout);
+    document.getElementById('logoutNavBtn')?.addEventListener('click', logout);
+}
 
 // --- Load Content from Firebase ---
 function loadDynamicContent() {
@@ -143,4 +148,5 @@ window.addEventListener("scroll", reveal);
 document.addEventListener('DOMContentLoaded', () => {
     reveal();
     loadDynamicContent();
+    setupAuthHandlers();
 });
