@@ -491,3 +491,126 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
         font-size: 2rem;
     }
 }
+
+/* ========================================================= */
+/* ESTILOS NOVOS - SPA FIREBASE                              */
+/* ========================================================= */
+
+.spa-section {
+    padding: 8rem 0;
+}
+
+/* Formulários & Autenticação */
+.auth-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.auth-box {
+    background-color: var(--bg-card);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.auth-box h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.input-group input, .input-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #0d0d0f;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-bright);
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.input-group input:focus, .input-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.auth-switch {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.auth-switch a {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* GRID Projetos */
+.grid-projetos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Admin Tabs */
+.admin-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Tabelas Administrativas */
+.table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.admin-table th {
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.action-btn.delete {
+    color: #ff4757;
+}
+
+.mt-4 { margin-top: 2rem; }
+

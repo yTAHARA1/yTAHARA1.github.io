@@ -17,11 +17,14 @@
     <header class="header reveal">
         <div class="container nav-content">
             <div class="logo">ET<span class="accent">_</span></div>
-            <nav class="nav-links">
-                <a href="#sobre">Sobre</a>
-                <a href="#especialidades">Especialidades</a>
-                <a href="#projeto">Case Study</a>
-                <a href="#contato" class="btn-outline">Contato</a>
+            <nav class="nav-links" id="nav-links">
+                <a href="#sobre" class="nav-item">Sobre</a>
+                <a href="#especialidades" class="nav-item">Especialidades</a>
+                <a href="#projeto" class="nav-item">Case Studies</a>
+                <a href="#perguntas" id="nav-perguntas" class="nav-item" style="display: none;">Blog Q&A</a>
+                <a href="#admin" id="nav-admin" class="nav-item accent" style="display: none;">Admin</a>
+                <a href="#login" id="nav-login" class="btn-outline nav-item">Login</a>
+                <a href="#" id="nav-logout" class="btn-outline" style="display: none;">Logout</a>
             </nav>
         </div>
     </header>
@@ -113,40 +116,102 @@
             </div>
         </div>
     </section>
-    <section class="projeto" id="projeto">
+    <section class="projeto spa-section" id="projeto">
         <div class="container">
-            <h2 class="section-title reveal">Case Study: <span class="text-white">Automação de Admissões</span></h2>
+            <h2 class="section-title reveal">Meus <span class="text-white">Case Studies</span></h2>
+            <div id="projetos-lista" class="grid-projetos">
+                <!-- Projetos renderizados dinamicamente aqui -->
+            </div>
+        </div>
+    </section>
 
-            <div class="projeto-content border-glow reveal delay-1">
+    <!-- ======== ÁREA DE LOGIN/REGISTRO ======== -->
+    <section class="spa-section" id="login" style="display: none;">
+        <div class="container auth-container">
+            <div class="auth-box border-glow">
+                <h2 id="auth-title">Login</h2>
+                <form id="auth-form">
+                    <div class="input-group" id="name-group" style="display: none;">
+                        <label>Nome</label>
+                        <input type="text" id="auth-nome" placeholder="Seu nome">
+                    </div>
+                    <div class="input-group">
+                        <label>E-mail</label>
+                        <input type="email" id="auth-email" required placeholder="admin@exemplo.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Senha</label>
+                        <input type="password" id="auth-senha" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-primary w-100" id="auth-submit">Entrar</button>
+                    <p class="auth-switch">Não tem conta? <a href="#" id="toggle-auth">Cadastre-se</a></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======== ÁREA DE PERGUNTAS (BLOG) ======== -->
+    <section class="spa-section" id="perguntas" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Q&A do <span class="accent">Blog</span></h2>
+            <div class="projeto-content border-glow form-section">
                 <div class="projeto-text">
-                    <div class="tech-stack">
-                        <span class="badge">Python</span>
-                        <span class="badge">Obsidian</span>
-                        <span class="badge">Integração de IA</span>
-                        <span class="badge">Google Docs API</span>
+                    <h3>Envie sua pergunta</h3>
+                    <form id="pergunta-form">
+                        <div class="input-group">
+                            <textarea id="pergunta-texto" rows="4" required placeholder="O que você quer saber sobre infraestrutura, python ou carreira?"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Enviar Pergunta</button>
+                    </form>
+                    <div id="lista-minhas-perguntas" class="mt-4">
+                        <!-- Lista de perguntas feitas por este usuario -->
                     </div>
-                    <h3>Data Pipeline: Obsidian → Google Docs</h3>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                    <div class="process-step">
-                        <h4><span class="accent">></span> O Contexto</h4>
-                        <p>O fluxo de admissões gerava gargalos absurdos e trabalho manual repetitivo que limitava o
-                            potencial estratégico e humano da nossa equipe de Infraestrutura.</p>
-                    </div>
+    <!-- ======== PAINEL ADMINISTRATIVO ======== -->
+    <section class="spa-section" id="admin" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Painel <span class="accent">Admin</span></h2>
+            
+            <div class="admin-tabs">
+                <button class="btn-primary tab-btn active" data-tab="admin-projetos">Projetos</button>
+                <button class="btn-secondary tab-btn" data-tab="admin-usuarios">Usuários</button>
+                <button class="btn-secondary tab-btn" data-tab="admin-perguntas">Perguntas</button>
+            </div>
 
-                    <div class="process-step">
-                        <h4><span class="accent">></span> A Solução Desenvolvida</h4>
-                        <p>Fugindo do padrão de "apenas hardware", desenvolvi um script autônomo em Python. Este script
-                            consome arquivos brutos do Obsidian, processa a inteligência das informações (inspirado
-                            pelos modelos lógicos do NotebookLM) e injeta tudo de forma estruturada em relatórios
-                            oficiais no Google Docs.</p>
-                    </div>
+            <div id="admin-projetos" class="tab-content active border-glow projeto-content">
+                <div class="projeto-text">
+                    <h3>Adicionar Novo Case Study</h3>
+                    <form id="form-novo-projeto">
+                        <div class="input-group"><label>Título</label><input type="text" id="proj-titulo" required></div>
+                        <div class="input-group"><label>Tags (separadas por vírgula)</label><input type="text" id="proj-tags" required></div>
+                        <div class="input-group"><label>Link (URL)</label><input type="url" id="proj-link"></div>
+                        <div class="input-group"><label>URL da Capa da Imagem (Opcional)</label><input type="url" id="proj-imagem" placeholder="Ex: https://sua-imagem.com/foto.png"></div>
+                        <div class="input-group"><label>Descrição</label><textarea id="proj-descricao" rows="4" required></textarea></div>
+                        <button type="submit" class="btn-primary">Salvar Projeto</button>
+                    </form>
+                </div>
+            </div>
 
-                    <div class="process-step">
-                        <h4><span class="accent">></span> Impacto na Operação</h4>
-                        <p>O que antes era cópia manual demorada tornou-se um pipeline 100% autônomo. Isolamento dos
-                            dados com segurança no histórico, sem atrito, liberando mais tempo para inovar de verdade.
-                        </p>
+            <div id="admin-usuarios" class="tab-content border-glow projeto-content" style="display: none;">
+                <div class="projeto-text">
+                    <h3>Gerenciar Usuários</h3>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead><tr><th>Nome</th><th>E-mail</th><th>Role</th><th>Ações</th></tr></thead>
+                            <tbody id="tabela-usuarios"></tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
+
+            <div id="admin-perguntas" class="tab-content border-glow projeto-content" style="display: none;">
+                <div class="projeto-text">
+                    <h3>Gerenciar Perguntas</h3>
+                    <div id="lista-todas-perguntas"></div>
                 </div>
             </div>
         </div>
@@ -194,6 +259,7 @@
     </footer>
 
     <script src="script.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Função de checagem para saber se o requisitante tem role 'admin'
+    function isAdmin() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // Função para verificar se a conta existe e não foi desativada (usuário ainda consta na base)
+    function isRegisteredAndActive() {
+    	return request.auth != null &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    match /users/{userId} {
+      // Qualquer um pode criar seu perfil NA HORA DO CADASTRO
+      allow create: if request.auth != null && request.auth.uid == userId;
+      // Usuário lê o próprio, Admin lê de todos
+      allow read: if request.auth.uid == userId || isAdmin();
+      // Apenas Admin pode atualizar (ex: mudar roles) e deletar
+      allow update, delete: if isAdmin();
+    }
+
+    match /projetos/{projetoId} {
+      // Qualquer pessoa (mesmo deslogada) pode ver os projetos (são as postagens no portfólio)
+      allow read: if true;
+      // Apenas Admin cria, atualiza ou deleta
+      allow create, update, delete: if isAdmin();
+    }
+    
+    match /perguntas/{perguntaId} {
+      // Usuário ativo e logado pode fazer perguntas
+      allow create: if isRegisteredAndActive();
+      // O autor pode ler a dele. Admin pode ler de todos.
+      allow read: if request.auth.uid == resource.data.uid || isAdmin();
+      // Só Admin pode mudar status ou excluir (ou o próprio usuário pode apagar sua pergunta)
+      allow update: if isAdmin();
+      allow delete: if request.auth.uid == resource.data.uid || isAdmin();
+    }
+  }
+}
