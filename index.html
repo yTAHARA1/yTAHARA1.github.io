@@ -20,11 +20,17 @@
             <nav class="nav-links">
                 <a href="#sobre">Sobre</a>
                 <a href="#especialidades">Especialidades</a>
-                <a href="#projeto">Case Study</a>
-                <a href="#contato" class="btn-outline">Contato</a>
+                <a href="#projeto">Cases</a>
+                <a href="#blog">Blog</a>
+                <button id="authBtn" class="btn-outline guest-only">Entrar</button>
+                <div class="user-profile-nav auth-only" style="display: none;">
+                    <span id="userNameDisplay"></span>
+                    <button id="logoutNavBtn" class="btn-small">Sair</button>
+                </div>
             </nav>
         </div>
     </header>
+
     <section class="hero" id="home">
         <div class="container hero-content">
             <div class="hero-text reveal">
@@ -35,23 +41,24 @@
                 <p class="subtitle">Eu sou Emilio Tahara. Aos 16 anos, atuo na infraestrutura interna da Solinftec,
                     unindo hardware, compliance e dados.</p>
                 <div class="hero-actions">
-                    <a href="#projeto" class="btn-primary">Ver Projeto em Destaque</a>
+                    <a href="#projeto" class="btn-primary">Ver Projetos</a>
                     <a href="#sobre" class="btn-secondary">Conhecer Meu Perfil</a>
                 </div>
             </div>
 
             <div class="hero-image-wrapper reveal delay-2">
                 <div class="image-placeholder portrait">
-                    <img src="fotominha_portifolio.jpeg" alt="Sua foto de perfil aqui" class="actual-image">
+                    <img src="fotominha_portifolio.jpeg" alt="Sua foto de perfil" class="actual-image">
                 </div>
             </div>
         </div>
     </section>
+
     <section class="sobre" id="sobre">
         <div class="container sobre-content">
             <div class="sobre-image-wrapper reveal">
                 <div class="image-placeholder portrait glow-border">
-                    <img src="fototahara_jiu.jpeg" alt="Sua foto atuando ou no tatame" class="actual-image">
+                    <img src="fototahara_jiu.jpeg" alt="Sua foto no tatame" class="actual-image">
                 </div>
             </div>
 
@@ -68,6 +75,7 @@
             </div>
         </div>
     </section>
+
     <section class="especialidades" id="especialidades">
         <div class="container">
             <h2 class="section-title reveal">Minhas <span class="accent">Especialidades</span></h2>
@@ -113,44 +121,42 @@
             </div>
         </div>
     </section>
+
+    <!-- Dynamic Projects Section -->
     <section class="projeto" id="projeto">
         <div class="container">
-            <h2 class="section-title reveal">Case Study: <span class="text-white">Automação de Admissões</span></h2>
-
-            <div class="projeto-content border-glow reveal delay-1">
-                <div class="projeto-text">
-                    <div class="tech-stack">
-                        <span class="badge">Python</span>
-                        <span class="badge">Obsidian</span>
-                        <span class="badge">Integração de IA</span>
-                        <span class="badge">Google Docs API</span>
-                    </div>
-                    <h3>Data Pipeline: Obsidian → Google Docs</h3>
-
-                    <div class="process-step">
-                        <h4><span class="accent">></span> O Contexto</h4>
-                        <p>O fluxo de admissões gerava gargalos absurdos e trabalho manual repetitivo que limitava o
-                            potencial estratégico e humano da nossa equipe de Infraestrutura.</p>
-                    </div>
-
-                    <div class="process-step">
-                        <h4><span class="accent">></span> A Solução Desenvolvida</h4>
-                        <p>Fugindo do padrão de "apenas hardware", desenvolvi um script autônomo em Python. Este script
-                            consome arquivos brutos do Obsidian, processa a inteligência das informações (inspirado
-                            pelos modelos lógicos do NotebookLM) e injeta tudo de forma estruturada em relatórios
-                            oficiais no Google Docs.</p>
-                    </div>
-
-                    <div class="process-step">
-                        <h4><span class="accent">></span> Impacto na Operação</h4>
-                        <p>O que antes era cópia manual demorada tornou-se um pipeline 100% autônomo. Isolamento dos
-                            dados com segurança no histórico, sem atrito, liberando mais tempo para inovar de verdade.
-                        </p>
-                    </div>
-                </div>
+            <h2 class="section-title reveal">Projetos em <span class="text-white">Destaque</span></h2>
+            <div id="projectsContainer">
+                <!-- Data will be loaded from Firebase -->
+                <div class="loading-spinner"></div>
             </div>
         </div>
     </section>
+
+    <!-- Blog Section -->
+    <section class="blog" id="blog">
+        <div class="container">
+            <h2 class="section-title reveal">Conteúdo & <span class="accent">Insights</span></h2>
+            <div class="blog-grid" id="blogContainer">
+                <!-- Blog posts from Firebase -->
+            </div>
+            
+            <!-- Private Q&A (Visible only to logged users) -->
+            <div class="qa-section auth-only" style="display: none;">
+                <div class="divider"></div>
+                <h3>Tem alguma dúvida técnica?</h3>
+                <p>Envie sua pergunta privada e eu responderei assim que possível.</p>
+                <form id="qaForm" class="qa-form">
+                    <textarea id="questionText" placeholder="Sua dúvida aqui..." required></textarea>
+                    <button type="submit" class="btn-primary">Enviar Pergunta</button>
+                </form>
+            </div>
+            <div class="guest-only text-center">
+                <p><a href="#" class="openAuthModal accent">Entre ou Cadastre-se</a> para enviar perguntas privadas.</p>
+            </div>
+        </div>
+    </section>
+
     <footer class="footer" id="contato">
         <div class="container footer-content reveal">
             <h2>Pronto para o <span class="accent">próximo desafio?</span></h2>
@@ -168,7 +174,7 @@
                     </svg>
                     LinkedIn
                 </a>
-                <a href="#" class="social-btn" target="_blank" aria-label="GitHub">
+                <a href="https://github.com/yTAHARA1" class="social-btn" target="_blank" aria-label="GitHub">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path
@@ -193,7 +199,86 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content auth-card">
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Cadastro</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Seu email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Entrar</button>
+            </form>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="regName" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" placeholder="Seu melhor email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" placeholder="Crie uma senha" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Criar Conta</button>
+            </form>
+            <button class="closeModal auth-close">&times;</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Fallback completo para o Modal e Abas (funciona no file:// e no Live Server)
+        document.addEventListener('DOMContentLoaded', function() {
+            const authBtn = document.getElementById('authBtn');
+            const authModal = document.getElementById('authModal');
+            const closeModals = document.querySelectorAll('.closeModal');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const authForms = document.querySelectorAll('.auth-form');
+            
+            // Abrir Modal
+            const openModal = function() {
+                authModal.classList.add('active');
+            };
+
+            if (authBtn) authBtn.onclick = openModal;
+            document.querySelectorAll('.openAuthModal').forEach(el => el.onclick = openModal);
+            
+            // Fechar Modal
+            closeModals.forEach(function(btn) {
+                btn.onclick = function() {
+                    authModal.classList.remove('active');
+                };
+            });
+
+            // Trocar Abas (Login / Cadastro)
+            tabBtns.forEach(function(btn) {
+                btn.onclick = function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    authForms.forEach(f => f.classList.remove('active'));
+                    btn.classList.add('active');
+                    const targetForm = document.getElementById(btn.getAttribute('data-tab') + 'Form');
+                    if (targetForm) targetForm.classList.add('active');
+                };
+            });
+
+            // Evitar recarregamento caso o Firebase falhe ou o script demore
+            const preventReload = function(e) {
+                e.preventDefault();
+                console.log("Formulário interceptado pelo fallback.");
+            };
+            document.getElementById('loginForm').onsubmit = preventReload;
+            document.getElementById('registerForm').onsubmit = preventReload;
+        });
+    </script>
+    <script type="module" src="script.js"></script>
 </body>
 
 </html>
