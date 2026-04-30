@@ -67,6 +67,7 @@ onAuthStateChanged(auth, async (user) => {
             if (currentRole === "admin") {
                 navAdmin.style.display = "block";
                 carregarProjetosAdmin();
+                carregarCertificadosAdmin();
                 carregarUsuarios();
                 carregarTodasPerguntas();
             } else {
@@ -228,6 +229,40 @@ async function carregarQnAPublico() {
 
 // Chamar ao carregar a página
 carregarProjetosPublicos();
+
+async function carregarCertificadosPublicos() {
+    const lista = document.getElementById("certificados-lista");
+    if(!lista) return;
+
+    try {
+        const q = query(collection(db, "certificados"));
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            lista.innerHTML = "<p>Nenhum certificado cadastrado no momento.</p>";
+            return;
+        }
+
+        let html = "";
+        snapshot.forEach((doc) => {
+            const c = doc.data();
+            html += `
+                <div class="card reveal active">
+                    ${c.imagemURL ? `<img src="${c.imagemURL}" alt="${c.titulo}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                    <div class="tech-stack" style="margin-bottom:1rem;">
+                        <span class="badge" style="background: rgba(255,255,255,0.1); color: var(--text-bright)">${c.emissor}</span>
+                    </div>
+                    <h3 style="margin-bottom: 1rem;">${c.titulo}</h3>
+                    ${c.link ? `<a href="${c.link}" target="_blank" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
+                </div>
+            `;
+        });
+        lista.innerHTML = html;
+    } catch (e) {
+        console.error("Erro ao carregar certificados públicos", e);
+    }
+}
+carregarCertificadosPublicos();
 window.carregarQnAPublico = carregarQnAPublico;
 carregarQnAPublico();
 
@@ -535,6 +570,114 @@ window.deletarProjeto = async (pid) => {
             carregarProjetosPublicos();
             carregarProjetosAdmin();
             window.cancelarEdicao(); // limpa edições se estiver editando este
+        } catch(e) { alert("Erro: " + e.message); }
+    }
+}
+
+// Admin: Criar/Editar Certificado
+const formCertificado = document.getElementById("form-novo-certificado");
+const btnSubmitCert = document.getElementById("cert-btn-submit");
+
+if(formCertificado) {
+    formCertificado.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (currentRole !== "admin") return;
+
+        const id = document.getElementById("cert-id").value;
+        const titulo = document.getElementById("cert-titulo").value;
+        const emissor = document.getElementById("cert-emissor").value;
+        const link = document.getElementById("cert-link").value;
+        const imagemURL = document.getElementById("cert-imagem").value;
+
+        try {
+            btnSubmitCert.innerText = "Salvando...";
+
+            if (id) {
+                await updateDoc(doc(db, "certificados", id), {
+                    titulo, emissor, link, imagemURL,
+                    dataAtualizacao: new Date().toISOString()
+                });
+                alert("Certificado atualizado com sucesso!");
+            } else {
+                await addDoc(collection(db, "certificados"), {
+                    titulo, emissor, link, imagemURL,
+                    dataCriacao: new Date().toISOString()
+                });
+                alert("Certificado salvo com sucesso!");
+            }
+
+            window.cancelarEdicaoCertificado();
+            carregarCertificadosPublicos();
+            carregarCertificadosAdmin();
+        } catch (e) {
+            alert("Erro ao salvar certificado: " + e.message);
+        } finally {
+            btnSubmitCert.innerText = id ? "Atualizar Certificado" : "Salvar Certificado";
+        }
+    });
+}
+
+// Admin: Tabela de Certificados
+async function carregarCertificadosAdmin() {
+    if (currentRole !== "admin") return;
+    const div = document.getElementById("tabela-certificados-admin");
+    if(!div) return;
+    try {
+        const snapshot = await getDocs(collection(db, "certificados"));
+        let html = "";
+        
+        let arr = [];
+        snapshot.forEach(docSnap => arr.push({ id: docSnap.id, ...docSnap.data() }));
+
+        arr.forEach(c => {
+            const safeObj = encodeURIComponent(JSON.stringify(c));
+            html += `
+                <div style="border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${c.titulo}</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Emissor: ${c.emissor}</div>
+                    </div>
+                    <div>
+                        <button class="action-btn" onclick="window.prepararEdicaoCertificado('${safeObj}')">Editar</button>
+                        <button class="action-btn delete" onclick="window.deletarCertificado('${c.id}')">Excluir</button>
+                    </div>
+                </div>
+            `;
+        });
+        div.innerHTML = html || "<p>Nenhum certificado postado.</p>";
+    } catch(e) { console.error(e); }
+}
+
+window.prepararEdicaoCertificado = (encodedObj) => {
+    const c = JSON.parse(decodeURIComponent(encodedObj));
+    document.getElementById("form-cert-title").innerText = "Atualizar Certificado";
+    document.getElementById("cert-id").value = c.id;
+    document.getElementById("cert-titulo").value = c.titulo || "";
+    document.getElementById("cert-emissor").value = c.emissor || "";
+    document.getElementById("cert-link").value = c.link || "";
+    document.getElementById("cert-imagem").value = c.imagemURL || "";
+    
+    document.getElementById("cert-btn-submit").innerText = "Atualizar Certificado";
+    document.getElementById("cert-btn-cancelar").style.display = "inline-block";
+    document.getElementById("form-cert-title").scrollIntoView({ behavior: 'smooth' });
+}
+
+window.cancelarEdicaoCertificado = () => {
+    document.getElementById("form-novo-certificado").reset();
+    document.getElementById("cert-id").value = "";
+    document.getElementById("form-cert-title").innerText = "Adicionar Novo Certificado";
+    document.getElementById("cert-btn-submit").innerText = "Salvar Certificado";
+    document.getElementById("cert-btn-cancelar").style.display = "none";
+}
+
+window.deletarCertificado = async (id) => {
+    if(confirm("Tem absoluta certeza de que deseja EXCLUIR este Certificado do site?")) {
+        try {
+            await deleteDoc(doc(db, "certificados", id));
+            alert("Certificado excluído.");
+            carregarCertificadosPublicos();
+            carregarCertificadosAdmin();
+            window.cancelarEdicaoCertificado();
         } catch(e) { alert("Erro: " + e.message); }
     }
 }

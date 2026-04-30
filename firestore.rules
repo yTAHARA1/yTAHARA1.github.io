@@ -30,6 +30,11 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
     
+    match /certificados/{certificadoId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
     match /perguntas/{perguntaId} {
       // Usuário ativo e logado pode fazer perguntas
       allow create: if isRegisteredAndActive();

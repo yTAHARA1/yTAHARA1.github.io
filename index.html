@@ -20,6 +20,7 @@
             <nav class="nav-links" id="nav-links">
                 <a href="#sobre" class="nav-item">Sobre</a>
                 <a href="#especialidades" class="nav-item">Especialidades</a>
+                <a href="#certificados" class="nav-item">Certificados</a>
                 <a href="#projeto" class="nav-item">Case Studies</a>
                 <a href="#perguntas" id="nav-perguntas" class="nav-item" style="display: none;">Blog Q&A</a>
                 <a href="#admin" id="nav-admin" class="nav-item accent" style="display: none;">Admin</a>
@@ -116,6 +117,15 @@
             </div>
         </div>
     </section>
+    <section class="certificados spa-section" id="certificados">
+        <div class="container">
+            <h2 class="section-title reveal">Meus <span class="accent">Certificados</span></h2>
+            <div id="certificados-lista" class="grid-projetos">
+                <!-- Certificados renderizados dinamicamente -->
+            </div>
+        </div>
+    </section>
+
     <section class="projeto spa-section" id="projeto">
         <div class="container">
             <h2 class="section-title reveal">Meus <span class="text-white">Case Studies</span></h2>
@@ -183,6 +193,7 @@
             
             <div class="admin-tabs">
                 <button class="btn-primary tab-btn active" data-tab="admin-projetos">Projetos</button>
+                <button class="btn-secondary tab-btn" data-tab="admin-certificados">Certificados</button>
                 <button class="btn-secondary tab-btn" data-tab="admin-usuarios">Usuários</button>
                 <button class="btn-secondary tab-btn" data-tab="admin-perguntas">Perguntas</button>
             </div>
@@ -207,6 +218,26 @@
                     <div id="tabela-projetos-admin">
                         <!-- Tabela renderizada dinamicamente -->
                     </div>
+                </div>
+            </div>
+
+            <div id="admin-certificados" class="tab-content border-glow projeto-content" style="display: none;">
+                <div class="projeto-text">
+                    <h3 id="form-cert-title">Adicionar Novo Certificado</h3>
+                    <form id="form-novo-certificado">
+                        <input type="hidden" id="cert-id">
+                        <div class="input-group"><label>Nome do Certificado</label><input type="text" id="cert-titulo" required></div>
+                        <div class="input-group"><label>Instituição / Emissor</label><input type="text" id="cert-emissor" required></div>
+                        <div class="input-group"><label>URL da Imagem / Selo</label><input type="url" id="cert-imagem" placeholder="Ex: https://img.com/certificado.png" required></div>
+                        <div class="input-group"><label>Link de Verificação (Opcional)</label><input type="url" id="cert-link"></div>
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="submit" class="btn-primary" id="cert-btn-submit">Salvar Certificado</button>
+                            <button type="button" class="btn-secondary" id="cert-btn-cancelar" style="display: none;" onclick="window.cancelarEdicaoCertificado()">Cancelar Edição</button>
+                        </div>
+                    </form>
+
+                    <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Certificados Publicados</h3>
+                    <div id="tabela-certificados-admin"></div>
                 </div>
             </div>
 
