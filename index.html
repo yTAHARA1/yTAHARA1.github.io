@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emilio Tahara | Infraestrutura e Automação</title>
+    <meta name="description"
+        content="Portfólio de Emilio Tahara - Infraestrutura, Automação Corporativa e Resiliência.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="header reveal">
+        <div class="container nav-content">
+            <div class="logo">ET<span class="accent">_</span></div>
+            <nav class="nav-links">
+                <a href="#sobre">Sobre</a>
+                <a href="#especialidades">Especialidades</a>
+                <a href="#projeto">Cases</a>
+                <a href="#blog">Blog</a>
+                <button id="authBtn" class="btn-outline guest-only">Entrar</button>
+                <div class="user-profile-nav auth-only" style="display: none;">
+                    <span id="userNameDisplay"></span>
+                    <button id="logoutNavBtn" class="btn-small">Sair</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <div class="hero-text reveal">
+                <p class="overline"><span class="accent">></span> Olá, mundo.</p>
+                <h1>A disciplina do tatame aplicada à vanguarda da <span class="accent delay-1">Infraestrutura</span> e
+                    <span class="accent delay-2">Automação.</span>
+                </h1>
+                <p class="subtitle">Eu sou Emilio Tahara. Aos 16 anos, atuo na infraestrutura interna da Solinftec,
+                    unindo hardware, compliance e dados.</p>
+                <div class="hero-actions">
+                    <a href="#projeto" class="btn-primary">Ver Projetos</a>
+                    <a href="#sobre" class="btn-secondary">Conhecer Meu Perfil</a>
+                </div>
+            </div>
+
+            <div class="hero-image-wrapper reveal delay-2">
+                <div class="image-placeholder portrait">
+                    <img src="fotominha_portifolio.jpeg" alt="Sua foto de perfil" class="actual-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sobre" id="sobre">
+        <div class="container sobre-content">
+            <div class="sobre-image-wrapper reveal">
+                <div class="image-placeholder portrait glow-border">
+                    <img src="fototahara_jiu.jpeg" alt="Sua foto no tatame" class="actual-image">
+                </div>
+            </div>
+
+            <div class="sobre-text reveal delay-1">
+                <h2>Crescer através da <span class="text-white">persistência.</span></h2>
+                <div class="divider"></div>
+                <p>Cursando o 2º ano do Ensino Médio Técnico (AMS) na <strong>ETEC de Araçatuba</strong>, divido meu
+                    tempo entre a inovação tecnológica na <strong>Solinftec</strong> e os tatames.</p>
+                <p>Como <strong>faixa azul de Jiu-Jitsu</strong>, aprendi que a paciência e a disciplina constroem os
+                    melhores resultados. Na TI, aplico a mesma máxima: se existe um problema complexo que ainda não sei
+                    resolver, eu estudo, adapto e persisto com resiliência até arquitetar a solução ideal.</p>
+                <p>Meu foco não é apenas manter sistemas rodando, é sobre <strong>otimizar, proteger e inovar.</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="especialidades" id="especialidades">
+        <div class="container">
+            <h2 class="section-title reveal">Minhas <span class="accent">Especialidades</span></h2>
+
+            <div class="grid-especialidades">
+                <div class="card reveal delay-1">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <h3>Infraestrutura & Hardware</h3>
+                    <p>Montagem, manutenção avançada e domínio completo no ecossistema corporativo Windows (Active
+                        Directory, gestão de ativos).</p>
+                </div>
+                <div class="card reveal delay-2">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3>Compliance & Segurança</h3>
+                    <p>Gestão rigorosa de softwares corporativos, garantindo aderência a políticas de segurança interna
+                        e proteção de dados sensíveis.</p>
+                </div>
+                <div class="card reveal delay-3">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"></polyline>
+                            <line x1="12" y1="19" x2="20" y2="19"></line>
+                        </svg>
+                    </div>
+                    <h3>Automação & Scripting</h3>
+                    <p>Desenvolvimento em Python focado em performance, eliminação de gargalos repetitivos e integração
+                        entre plataformas de dados.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Projects Section -->
+    <section class="projeto" id="projeto">
+        <div class="container">
+            <h2 class="section-title reveal">Projetos em <span class="text-white">Destaque</span></h2>
+            <div id="projectsContainer">
+                <!-- Data will be loaded from Firebase -->
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog" id="blog">
+        <div class="container">
+            <h2 class="section-title reveal">Conteúdo & <span class="accent">Insights</span></h2>
+            <div class="blog-grid" id="blogContainer">
+                <!-- Blog posts from Firebase -->
+            </div>
+            
+            <!-- Private Q&A (Visible only to logged users) -->
+            <div class="qa-section auth-only" style="display: none;">
+                <div class="divider"></div>
+                <h3>Tem alguma dúvida técnica?</h3>
+                <p>Envie sua pergunta privada e eu responderei assim que possível.</p>
+                <form id="qaForm" class="qa-form">
+                    <textarea id="questionText" placeholder="Sua dúvida aqui..." required></textarea>
+                    <button type="submit" class="btn-primary">Enviar Pergunta</button>
+                </form>
+            </div>
+            <div class="guest-only text-center">
+                <p><a href="#" class="openAuthModal accent">Entre ou Cadastre-se</a> para enviar perguntas privadas.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contato">
+        <div class="container footer-content reveal">
+            <h2>Pronto para o <span class="accent">próximo desafio?</span></h2>
+            <p>Se você busca alguém focado em aprendizado e capaz de unir infraestrutura e código,</p>
+            <p class="highlight-text">vamos conversar.</p>
+
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/emilio-tahara-b5970b313/" class="social-btn" target="_blank"
+                    aria-label="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/yTAHARA1" class="social-btn" target="_blank" aria-label="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                        </path>
+                    </svg>
+                    GitHub
+                </a>
+                <a href="mailto: emilio.tahara01@gmail.com" class="social-btn" aria-label="Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Email
+                </a>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Emilio Tahara. Desenhado e codificado com disciplina.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content auth-card">
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Cadastro</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Seu email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Entrar</button>
+            </form>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="regName" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="regEmail" placeholder="Seu melhor email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" placeholder="Crie uma senha" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Criar Conta</button>
+            </form>
+            <button class="closeModal auth-close">&times;</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Fallback completo para o Modal e Abas (funciona no file:// e no Live Server)
+        document.addEventListener('DOMContentLoaded', function() {
+            const authBtn = document.getElementById('authBtn');
+            const authModal = document.getElementById('authModal');
+            const closeModals = document.querySelectorAll('.closeModal');
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const authForms = document.querySelectorAll('.auth-form');
+            
+            // Abrir Modal
+            const openModal = function() {
+                authModal.classList.add('active');
+            };
+
+            if (authBtn) authBtn.onclick = openModal;
+            document.querySelectorAll('.openAuthModal').forEach(el => el.onclick = openModal);
+            
+            // Fechar Modal
+            closeModals.forEach(function(btn) {
+                btn.onclick = function() {
+                    authModal.classList.remove('active');
+                };
+            });
+
+            // Trocar Abas (Login / Cadastro)
+            tabBtns.forEach(function(btn) {
+                btn.onclick = function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    authForms.forEach(f => f.classList.remove('active'));
+                    btn.classList.add('active');
+                    const targetForm = document.getElementById(btn.getAttribute('data-tab') + 'Form');
+                    if (targetForm) targetForm.classList.add('active');
+                };
+            });
+
+            // Evitar recarregamento caso o Firebase falhe ou o script demore
+            const preventReload = function(e) {
+                e.preventDefault();
+                console.log("Formulário interceptado pelo fallback.");
+            };
+            document.getElementById('loginForm').onsubmit = preventReload;
+            document.getElementById('registerForm').onsubmit = preventReload;
+        });
+    </script>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
