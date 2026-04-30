@@ -250,12 +250,15 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     });
 });
 
-// Admin: Criar Projeto
+// Admin: Criar/Editar Projeto
 const formProjeto = document.getElementById("form-novo-projeto");
+const btnSubmitProj = document.getElementById("proj-btn-submit");
+
 formProjeto.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (currentRole !== "admin") return;
 
+    const id = document.getElementById("proj-id").value;
     const titulo = document.getElementById("proj-titulo").value;
     const tags = document.getElementById("proj-tags").value;
     const link = document.getElementById("proj-link").value;
@@ -263,20 +266,32 @@ formProjeto.addEventListener("submit", async (e) => {
     const imagemURL = document.getElementById("proj-imagem").value;
 
     try {
-        authSubmit.innerText = "Salvando...";
+        btnSubmitProj.innerText = "Salvando...";
 
-        await addDoc(collection(db, "projetos"), {
-            titulo, tags, link, descricao, imagemURL,
-            dataCriacao: new Date().toISOString()
-        });
+        if (id) {
+            // Editando
+            await updateDoc(doc(db, "projetos", id), {
+                titulo, tags, link, descricao, imagemURL,
+                dataAtualizacao: new Date().toISOString()
+            });
+            alert("Projeto atualizado com sucesso!");
+        } else {
+            // Criando novo
+            await addDoc(collection(db, "projetos"), {
+                titulo, tags, link, descricao, imagemURL,
+                dataCriacao: new Date().toISOString()
+            });
+            alert("Projeto salvo com sucesso!");
+        }
 
-        alert("Projeto salvo com sucesso!");
-        formProjeto.reset();
-        carregarProjetosPublicos(); // Atualiza a public
-        carregarProjetosAdmin(); // Atualiza a lista no admin (se implementasse lista lá, mas atualizar public ja vale)
+        window.cancelarEdicao(); // limpa o form
+        carregarProjetosPublicos();
+        carregarProjetosAdmin();
     } catch (e) {
         console.error(e);
         alert("Erro ao salvar projeto: " + e.message);
+    } finally {
+        btnSubmitProj.innerText = id ? "Atualizar Projeto" : "Salvar Projeto";
     }
 });
 
@@ -372,5 +387,71 @@ window.deletarPergunta = async (pid) => {
     }
 }
 
-// Apenas um stub para evitar erro
-function carregarProjetosAdmin() {} 
+// Admin: Tabela de Projetos
+async function carregarProjetosAdmin() {
+    if (currentRole !== "admin") return;
+    const div = document.getElementById("tabela-projetos-admin");
+    try {
+        const snapshot = await getDocs(collection(db, "projetos"));
+        let html = "";
+        
+        let projetosArray = [];
+        snapshot.forEach(docSnap => projetosArray.push({ id: docSnap.id, ...docSnap.data() }));
+
+        projetosArray.forEach(p => {
+            // Escapar aspas duplas caso existam no título para não quebrar a chamada JSON
+            const safeObj = encodeURIComponent(JSON.stringify(p));
+            html += `
+                <div style="border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${p.titulo}</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Tags: ${p.tags || '-'}</div>
+                    </div>
+                    <div>
+                        <button class="action-btn" onclick="window.prepararEdicao('${safeObj}')">Editar</button>
+                        <button class="action-btn delete" onclick="window.deletarProjeto('${p.id}')">Excluir</button>
+                    </div>
+                </div>
+            `;
+        });
+        div.innerHTML = html || "<p>Nenhum projeto postado.</p>";
+    } catch(e) { console.error(e); }
+}
+
+window.prepararEdicao = (encodedObj) => {
+    const p = JSON.parse(decodeURIComponent(encodedObj));
+    
+    document.getElementById("form-proj-title").innerText = "Atualizar Case Study";
+    document.getElementById("proj-id").value = p.id;
+    document.getElementById("proj-titulo").value = p.titulo || "";
+    document.getElementById("proj-tags").value = p.tags || "";
+    document.getElementById("proj-link").value = p.link || "";
+    document.getElementById("proj-imagem").value = p.imagemURL || "";
+    document.getElementById("proj-descricao").value = p.descricao || "";
+    
+    document.getElementById("proj-btn-submit").innerText = "Atualizar Projeto";
+    document.getElementById("proj-btn-cancelar").style.display = "inline-block";
+    
+    // Rolar para cima (onde o form está)
+    document.getElementById("form-proj-title").scrollIntoView({ behavior: 'smooth' });
+}
+
+window.cancelarEdicao = () => {
+    document.getElementById("form-novo-projeto").reset();
+    document.getElementById("proj-id").value = "";
+    document.getElementById("form-proj-title").innerText = "Adicionar Novo Case Study";
+    document.getElementById("proj-btn-submit").innerText = "Salvar Projeto";
+    document.getElementById("proj-btn-cancelar").style.display = "none";
+}
+
+window.deletarProjeto = async (pid) => {
+    if(confirm("Tem absoluta certeza de que deseja EXCLUIR este Case Study do site?")) {
+        try {
+            await deleteDoc(doc(db, "projetos", pid));
+            alert("Projeto excluído.");
+            carregarProjetosPublicos();
+            carregarProjetosAdmin();
+            window.cancelarEdicao(); // limpa edições se estiver editando este
+        } catch(e) { alert("Erro: " + e.message); }
+    }
+}

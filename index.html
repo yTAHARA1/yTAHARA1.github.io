@@ -184,15 +184,24 @@
 
             <div id="admin-projetos" class="tab-content active border-glow projeto-content">
                 <div class="projeto-text">
-                    <h3>Adicionar Novo Case Study</h3>
+                    <h3 id="form-proj-title">Adicionar Novo Case Study</h3>
                     <form id="form-novo-projeto">
+                        <input type="hidden" id="proj-id">
                         <div class="input-group"><label>Título</label><input type="text" id="proj-titulo" required></div>
                         <div class="input-group"><label>Tags (separadas por vírgula)</label><input type="text" id="proj-tags" required></div>
                         <div class="input-group"><label>Link (URL)</label><input type="url" id="proj-link"></div>
                         <div class="input-group"><label>URL da Capa da Imagem (Opcional)</label><input type="url" id="proj-imagem" placeholder="Ex: https://sua-imagem.com/foto.png"></div>
                         <div class="input-group"><label>Descrição</label><textarea id="proj-descricao" rows="4" required></textarea></div>
-                        <button type="submit" class="btn-primary">Salvar Projeto</button>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn-primary" id="proj-btn-submit">Salvar Projeto</button>
+                            <button type="button" class="btn-secondary" id="proj-btn-cancelar" style="display: none;" onclick="window.cancelarEdicao()">Cancelar Edição</button>
+                        </div>
                     </form>
+
+                    <h3 style="margin-top: 3rem; margin-bottom: 1.5rem;">Projetos Publicados</h3>
+                    <div id="tabela-projetos-admin">
+                        <!-- Tabela renderizada dinamicamente -->
+                    </div>
                 </div>
             </div>
 
