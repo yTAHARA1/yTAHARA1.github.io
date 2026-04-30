@@ -502,19 +502,24 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 
 /* Formulários & Autenticação */
 .auth-container {
+    width: 100%;
     max-width: 450px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
 }
 
 .auth-box {
+    width: 100%;
     background-color: var(--bg-card);
-    padding: 4rem 3rem;
+    padding: 3rem 2.5rem;
     border-radius: var(--border-radius);
     text-align: center;
     border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
 }
 
 .auth-box::before {
@@ -525,7 +530,7 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 }
 
 .auth-box h2 {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     font-size: 2.2rem;
     letter-spacing: -1px;
     color: var(--text-bright);
@@ -534,6 +539,7 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 .input-group {
     margin-bottom: 1.5rem;
     text-align: left;
+    width: 100%;
 }
 
 .input-group label {
@@ -548,7 +554,7 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 
 .input-group input, .input-group textarea {
     width: 100%;
-    padding: 16px 20px;
+    padding: 14px 18px;
     background-color: var(--bg-dark);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -556,21 +562,34 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     font-family: inherit;
     font-size: 1rem;
     transition: var(--transition);
+    box-sizing: border-box;
+}
+
+/* Corrige o fundo amarelo de preenchimento automático (autofill) no Chrome */
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover, 
+.input-group input:-webkit-autofill:focus, 
+.input-group input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px var(--bg-dark) inset !important;
+    -webkit-text-fill-color: var(--text-bright) !important;
+    border: 1px solid var(--accent);
 }
 
 .input-group input:focus, .input-group textarea:focus {
     outline: none;
     border-color: var(--accent);
-    background-color: rgba(0, 255, 136, 0.02);
+    background-color: var(--bg-dark);
     box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
 }
 
 .w-100 {
     width: 100%;
-    padding: 16px;
+    display: block !important;
+    padding: 14px;
     font-size: 1.1rem;
     letter-spacing: 0.5px;
     margin-top: 1rem;
+    box-sizing: border-box;
 }
 
 .auth-switch {
