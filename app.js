@@ -184,8 +184,46 @@ async function carregarProjetosPublicos() {
         console.error("Erro ao carregar projetos públicos", e);
     }
 }
+
+// ====== RENDERIZAR Q&A PÚBLICO ======
+async function carregarQnAPublico() {
+    const lista = document.getElementById("qna-public-lista");
+    if(!lista) return;
+
+    try {
+        const snapshot = await getDocs(collection(db, "perguntas"));
+        let html = "";
+        let count = 0;
+        snapshot.forEach((doc) => {
+            const p = doc.data();
+            if (p.status === "respondida") {
+                count++;
+                html += `
+                    <div class="card reveal active" style="border-left: 3px solid var(--accent); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;">A Comunidade Perguntou</div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; line-height: 1.4;">"${p.texto}"</h3>
+                        </div>
+                        <p style="color: var(--text-bright); background: rgba(0,255,136,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(0,255,136,0.1);"><strong>Emilio Tahara responde:</strong><br><br>${p.resposta || ''}</p>
+                    </div>
+                `;
+            }
+        });
+        if (count > 0) {
+            lista.innerHTML = html;
+            lista.style.display = "grid";
+        } else {
+            lista.style.display = "none";
+        }
+    } catch (e) {
+        console.error("Erro ao carregar QnA público", e);
+    }
+}
+
 // Chamar ao carregar a página
 carregarProjetosPublicos();
+window.carregarQnAPublico = carregarQnAPublico;
+carregarQnAPublico();
 
 // ====== LÓGICA DE PERGUNTAS (USUÁRIO) ======
 const formPergunta = document.getElementById("pergunta-form");
@@ -339,14 +377,23 @@ async function carregarTodasPerguntas() {
                 <div style="border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px; border-radius: 8px;">
                     <p><strong>De:</strong> ${p.nome}</p>
                     <p><strong>Pergunta:</strong> ${p.texto}</p>
-                    <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
-                        <span style="font-size: 0.85rem">Status atual:</span>
-                        <select onchange="window.mudarStatusPergunta('${id}', this.value)" style="background: var(--bg-dark); color: white; padding: 4px;">
-                            <option value="pendente" ${p.status === 'pendente'?'selected':''}>Pendente</option>
-                            <option value="respondida" ${p.status === 'respondida'?'selected':''}>Respondida</option>
-                            <option value="arquivada" ${p.status === 'arquivada'?'selected':''}>Arquivada</option>
-                        </select>
-                        <button class="action-btn delete" onclick="window.deletarPergunta('${id}')">Apagar</button>
+                    ${p.status === 'respondida' ? `<div style="margin-top: 10px; padding: 10px; background: var(--bg-dark); border-left: 2px solid var(--accent);"><small style="color:var(--text-muted)">Sua Resposta Publicada:</small><br> ${p.resposta}</div>` : ''}
+                    
+                    <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                        ${p.status !== 'respondida' ? `
+                            <textarea id="resp-${id}" rows="3" style="width:100%; padding: 10px; background: var(--bg-dark); color: var(--text-bright); border: 1px solid var(--border-color); border-radius:6px; font-family: inherit;" placeholder="Escreva a solução/resposta aqui..."></textarea>
+                            <button class="btn-primary" style="padding: 8px 16px; font-size: 0.9rem; max-width: 250px;" onclick="window.responderPergunta('${id}')">Salvar Resposta e Publicar</button>
+                        ` : ''}
+                        
+                        <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color);">
+                            <span style="font-size: 0.85rem">Status atual:</span>
+                            <select onchange="window.mudarStatusPergunta('${id}', this.value)" style="background: var(--bg-dark); color: white; padding: 4px; border: 1px solid var(--border-color)">
+                                <option value="pendente" ${p.status === 'pendente'?'selected':''}>Pendente</option>
+                                <option value="respondida" ${p.status === 'respondida'?'selected':''}>Respondida</option>
+                                <option value="arquivada" ${p.status === 'arquivada'?'selected':''}>Arquivada</option>
+                            </select>
+                            <button class="action-btn delete" onclick="window.deletarPergunta('${id}')">Apagar</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -375,7 +422,26 @@ window.deletarUsuario = async (uid) => {
 window.mudarStatusPergunta = async (pid, novoStatus) => {
     try {
         await updateDoc(doc(db, "perguntas", pid), { status: novoStatus });
+        window.carregarQnAPublico();
     } catch(e) { alert("Erro: " + e.message); }
+}
+
+window.responderPergunta = async (pid) => {
+    const textarea = document.getElementById("resp-" + pid);
+    if (!textarea || !textarea.value.trim()) {
+        alert("Você precisa digitar uma resposta antes de publicar.");
+        return;
+    }
+    
+    try {
+        await updateDoc(doc(db, "perguntas", pid), { 
+            status: "respondida",
+            resposta: textarea.value.trim()
+        });
+        alert("Resposta publicada com sucesso!");
+        carregarTodasPerguntas(); // Atualiza tab admin
+        window.carregarQnAPublico(); // Atualiza feed publico na hora
+    } catch(e) { alert("Erro ao salvar: " + e.message); }
 }
 
 window.deletarPergunta = async (pid) => {
@@ -383,6 +449,7 @@ window.deletarPergunta = async (pid) => {
         try {
             await deleteDoc(doc(db, "perguntas", pid));
             carregarTodasPerguntas();
+            window.carregarQnAPublico();
         } catch(e) { alert("Erro: " + e.message); }
     }
 }
