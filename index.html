@@ -17,7 +17,8 @@
     <header class="header reveal">
         <div class="container nav-content">
             <div class="logo">ET<span class="accent">_</span></div>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" style="font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; display: none;">☰</button>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu"
+                style="font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; display: none;">☰</button>
             <nav class="nav-links" id="nav-links">
                 <a href="#sobre" class="nav-item">Sobre</a>
                 <a href="#especialidades" class="nav-item">Especialidades</a>
@@ -134,7 +135,8 @@
                 <!-- Projetos renderizados dinamicamente aqui -->
             </div>
 
-            <h2 class="section-title reveal" style="margin-top: 8rem;">Respondendo a <span class="accent">Comunidade</span></h2>
+            <h2 class="section-title reveal" style="margin-top: 8rem;">Respondendo a <span
+                    class="accent">Comunidade</span></h2>
             <div id="qna-public-lista" class="grid-projetos" style="display: none;">
                 <!-- Perguntas e Respostas renderizadas aqui -->
             </div>
@@ -175,7 +177,8 @@
                     <h3>Envie sua pergunta</h3>
                     <form id="pergunta-form">
                         <div class="input-group">
-                            <textarea id="pergunta-texto" rows="4" required placeholder="O que você quer saber sobre infraestrutura, python ou carreira?"></textarea>
+                            <textarea id="pergunta-texto" rows="4" required
+                                placeholder="O que você quer saber sobre infraestrutura, python ou carreira?"></textarea>
                         </div>
                         <button type="submit" class="btn-primary">Enviar Pergunta</button>
                     </form>
@@ -191,7 +194,7 @@
     <section class="spa-section" id="admin" style="display: none;">
         <div class="container">
             <h2 class="section-title">Painel <span class="accent">Admin</span></h2>
-            
+
             <div class="admin-tabs">
                 <button class="btn-primary tab-btn active" data-tab="admin-projetos">Projetos</button>
                 <button class="btn-secondary tab-btn" data-tab="admin-certificados">Certificados</button>
@@ -204,14 +207,19 @@
                     <h3 id="form-proj-title">Adicionar Novo Case Study</h3>
                     <form id="form-novo-projeto">
                         <input type="hidden" id="proj-id">
-                        <div class="input-group"><label>Título</label><input type="text" id="proj-titulo" required></div>
-                        <div class="input-group"><label>Tags (separadas por vírgula)</label><input type="text" id="proj-tags" required></div>
+                        <div class="input-group"><label>Título</label><input type="text" id="proj-titulo" required>
+                        </div>
+                        <div class="input-group"><label>Tags (separadas por vírgula)</label><input type="text"
+                                id="proj-tags" required></div>
                         <div class="input-group"><label>Link (URL)</label><input type="url" id="proj-link"></div>
-                        <div class="input-group"><label>URL da Capa da Imagem (Opcional)</label><input type="url" id="proj-imagem" placeholder="Ex: https://sua-imagem.com/foto.png"></div>
-                        <div class="input-group"><label>Descrição</label><textarea id="proj-descricao" rows="4" required></textarea></div>
+                        <div class="input-group"><label>URL da Capa da Imagem (Opcional)</label><input type="url"
+                                id="proj-imagem" placeholder="Ex: https://sua-imagem.com/foto.png"></div>
+                        <div class="input-group"><label>Descrição</label><textarea id="proj-descricao" rows="4"
+                                required></textarea></div>
                         <div style="display: flex; gap: 1rem;">
                             <button type="submit" class="btn-primary" id="proj-btn-submit">Salvar Projeto</button>
-                            <button type="button" class="btn-secondary" id="proj-btn-cancelar" style="display: none;" onclick="window.cancelarEdicao()">Cancelar Edição</button>
+                            <button type="button" class="btn-secondary" id="proj-btn-cancelar" style="display: none;"
+                                onclick="window.cancelarEdicao()">Cancelar Edição</button>
                         </div>
                     </form>
 
@@ -227,13 +235,18 @@
                     <h3 id="form-cert-title">Adicionar Novo Certificado</h3>
                     <form id="form-novo-certificado">
                         <input type="hidden" id="cert-id">
-                        <div class="input-group"><label>Nome do Certificado</label><input type="text" id="cert-titulo" required></div>
-                        <div class="input-group"><label>Instituição / Emissor</label><input type="text" id="cert-emissor" required></div>
-                        <div class="input-group"><label>URL da Imagem / Selo</label><input type="url" id="cert-imagem" placeholder="Ex: https://img.com/certificado.png" required></div>
-                        <div class="input-group"><label>Link de Verificação (Opcional)</label><input type="url" id="cert-link"></div>
+                        <div class="input-group"><label>Nome do Certificado</label><input type="text" id="cert-titulo"
+                                required></div>
+                        <div class="input-group"><label>Instituição / Emissor</label><input type="text"
+                                id="cert-emissor" required></div>
+                        <div class="input-group"><label>URL da Imagem / Selo</label><input type="url" id="cert-imagem"
+                                placeholder="Ex: https://img.com/certificado.png" required></div>
+                        <div class="input-group"><label>Link de Verificação (Opcional)</label><input type="url"
+                                id="cert-link"></div>
                         <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                             <button type="submit" class="btn-primary" id="cert-btn-submit">Salvar Certificado</button>
-                            <button type="button" class="btn-secondary" id="cert-btn-cancelar" style="display: none;" onclick="window.cancelarEdicaoCertificado()">Cancelar Edição</button>
+                            <button type="button" class="btn-secondary" id="cert-btn-cancelar" style="display: none;"
+                                onclick="window.cancelarEdicaoCertificado()">Cancelar Edição</button>
                         </div>
                     </form>
 
@@ -247,7 +260,14 @@
                     <h3>Gerenciar Usuários</h3>
                     <div class="table-container">
                         <table class="admin-table">
-                            <thead><tr><th>Nome</th><th>E-mail</th><th>Role</th><th>Ações</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>E-mail</th>
+                                    <th>Role</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
                             <tbody id="tabela-usuarios"></tbody>
                         </table>
                     </div>
@@ -296,7 +316,8 @@
                     </svg>
                     Email
                 </a>
-                <a href="#" class="social-btn" target="_blank" aria-label="Instagram">
+                <a href="https://www.instagram.com/tahara_tt/" class="social-btn" target="_blank"
+                    aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
