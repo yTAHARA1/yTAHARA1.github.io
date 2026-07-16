@@ -20,6 +20,17 @@ import {
     onSnapshot 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// ====== UTILITÁRIO GERAL ======
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // ====== ESTADO GLOBAL ======
 let currentUser = null;
 let currentRole = "user";
@@ -57,7 +68,7 @@ if (menuToggle && navLinksContainer) {
     // Fechar menu ao clicar em um link mobile
     navLinksContainer.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", () => {
-            if(window.innerWidth <= 900) {
+            if(window.innerWidth <= 768) {
                 navLinksContainer.classList.remove("active");
             }
         });
@@ -142,8 +153,14 @@ toggleAuth.addEventListener("click", (e) => {
 
 authForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = document.getElementById("auth-email").value;
-    const senha = document.getElementById("auth-senha").value;
+    const email = document.getElementById("auth-email").value.trim();
+    const senha = document.getElementById("auth-senha").value.trim();
+    
+    // Validação estrita Frontend
+    if (!email || !senha) {
+        alert("E-mail e senha são obrigatórios!");
+        return;
+    }
     
     if (senha.length < 8) {
         alert("Sua senha precisa ter pelo menos 8 dígitos.");
@@ -152,7 +169,8 @@ authForm.addEventListener("submit", async (e) => {
     
     try {
         if (isRegistering) {
-            const nome = document.getElementById("auth-nome").value;
+            const nome = document.getElementById("auth-nome").value.trim();
+            if (!nome) { alert("O nome é obrigatório para cadastro."); return; }
             const userCred = await createUserWithEmailAndPassword(auth, email, senha);
             // Salvar no Firestore
             await setDoc(doc(db, "users", userCred.user.uid), {
@@ -194,14 +212,24 @@ async function carregarProjetosPublicos() {
             const p = doc.data();
             const id = doc.id;
             html += `
-                <div class="card reveal active">
-                    ${p.imagemURL ? `<img src="${p.imagemURL}" alt="${p.titulo}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
-                    <div class="tech-stack" style="margin-bottom:1rem;">
-                        ${p.tags ? p.tags.split(',').map(t => `<span class="badge">${t.trim()}</span>`).join('') : ''}
+                <div class="window-pane reveal active" tabindex="0">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="control-dot close"></span>
+                            <span class="control-dot minimize"></span>
+                            <span class="control-dot maximize"></span>
+                        </div>
+                        <span class="window-title">case_study_${id.substring(0, 6)}.json</span>
                     </div>
-                    <h3>${p.titulo}</h3>
-                    <p style="margin-bottom:1rem;">${p.descricao}</p>
-                    ${p.link ? `<a href="${p.link}" target="_blank" class="btn-outline" style="display:inline-block">Ver Projeto</a>` : ''}
+                    <div class="window-body">
+                        ${p.imagemURL ? `<img src="${escapeHTML(p.imagemURL)}" alt="${escapeHTML(p.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                        <div class="tech-stack" style="margin-bottom:1rem;">
+                            ${p.tags ? escapeHTML(p.tags).split(',').map(t => `<span class="badge">${t.trim()}</span>`).join('') : ''}
+                        </div>
+                        <h3>${escapeHTML(p.titulo)}</h3>
+                        <p style="margin-bottom:1rem;">${escapeHTML(p.descricao)}</p>
+                        ${p.link ? `<a href="${escapeHTML(p.link)}" target="_blank" class="btn-outline" style="display:inline-block">Ver Projeto</a>` : ''}
+                    </div>
                 </div>
             `;
         });
@@ -225,12 +253,22 @@ function carregarQnAPublico() {
             if (p.status === "respondida") {
                 count++;
                 html += `
-                    <div class="card reveal active" style="border-left: 3px solid var(--accent); display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;">A Comunidade Perguntou</div>
-                            <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; line-height: 1.4;">"${p.texto}"</h3>
+                    <div class="window-pane reveal active" style="border-left: 3px solid var(--accent-green); display: flex; flex-direction: column; justify-content: space-between;" tabindex="0">
+                        <div class="window-header">
+                            <div class="window-controls">
+                                <span class="control-dot close"></span>
+                                <span class="control-dot minimize"></span>
+                                <span class="control-dot maximize"></span>
+                            </div>
+                            <span class="window-title">qna_public_${doc.id.substring(0, 6)}.log</span>
                         </div>
-                        <p style="color: var(--text-bright); background: rgba(0,255,136,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(0,255,136,0.1);"><strong>Emilio Tahara responde:</strong><br><br>${p.resposta || ''}</p>
+                        <div class="window-body" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;">A Comunidade Perguntou</div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; line-height: 1.4;">"${escapeHTML(p.texto)}"</h3>
+                            </div>
+                            <p style="color: var(--text-primary); background: rgba(0, 255, 127, 0.03); padding: 15px; border-radius: 6px; border: 1px solid rgba(0, 255, 127, 0.1); margin-top: auto;"><strong>Emilio Tahara responde:</strong><br><br>${escapeHTML(p.resposta || '')}</p>
+                        </div>
                     </div>
                 `;
             }
@@ -268,13 +306,23 @@ async function carregarCertificadosPublicos() {
         snapshot.forEach((doc) => {
             const c = doc.data();
             html += `
-                <div class="card reveal active">
-                    ${c.imagemURL ? `<img src="${c.imagemURL}" alt="${c.titulo}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
-                    <div class="tech-stack" style="margin-bottom:1rem;">
-                        <span class="badge" style="background: rgba(255,255,255,0.1); color: var(--text-bright)">${c.emissor}</span>
+                <div class="window-pane reveal active" tabindex="0">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="control-dot close"></span>
+                            <span class="control-dot minimize"></span>
+                            <span class="control-dot maximize"></span>
+                        </div>
+                        <span class="window-title">certificate_${doc.id.substring(0, 6)}.crt</span>
                     </div>
-                    <h3 style="margin-bottom: 1rem;">${c.titulo}</h3>
-                    ${c.link ? `<a href="${c.link}" target="_blank" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
+                    <div class="window-body">
+                        ${c.imagemURL ? `<img src="${escapeHTML(c.imagemURL)}" alt="${escapeHTML(c.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                        <div class="tech-stack" style="margin-bottom:1rem;">
+                            <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-primary)">${escapeHTML(c.emissor)}</span>
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">${escapeHTML(c.titulo)}</h3>
+                        ${c.link ? `<a href="${escapeHTML(c.link)}" target="_blank" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
+                    </div>
                 </div>
             `;
         });
@@ -293,7 +341,11 @@ formPergunta.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!currentUser) return;
 
-    const texto = document.getElementById("pergunta-texto").value;
+    const texto = document.getElementById("pergunta-texto").value.trim();
+    if (!texto || texto.length > 1000) {
+        alert("Sua pergunta não pode estar vazia e o limite é de 1000 caracteres.");
+        return;
+    }
     
     // Obter o nome do usuário
     let nomeAutor = currentUser.email;
@@ -328,8 +380,8 @@ async function carregarMinhasPerguntas() {
             if (data.uid === currentUser.uid) {
                 html += `
                     <div style="border-left: 2px solid var(--accent); padding-left: 15px; margin-bottom: 15px; background: rgba(0,255,136,0.05); padding: 10px; border-radius: 4px;">
-                        <p style="margin-bottom:5px;">${data.texto}</p>
-                        <small style="color: var(--text-muted)">Status: <strong style="color: var(--text-bright)">${data.status}</strong> - Enviado em: ${new Date(data.dataHora).toLocaleString()}</small>
+                        <p style="margin-bottom:5px;">${escapeHTML(data.texto)}</p>
+                        <small style="color: var(--text-muted)">Status: <strong style="color: var(--text-bright)">${escapeHTML(data.status)}</strong> - Enviado em: ${new Date(data.dataHora).toLocaleString()}</small>
                     </div>
                 `;
             }
@@ -407,8 +459,8 @@ async function carregarUsuarios() {
             const id = docSnap.id;
             html += `
                 <tr>
-                    <td>${u.nome || '-'}</td>
-                    <td>${u.email}</td>
+                    <td>${escapeHTML(u.nome || '-')}</td>
+                    <td>${escapeHTML(u.email)}</td>
                     <td>
                         <select onchange="window.mudarRole('${id}', this.value)" style="background: var(--bg-dark); color: white; padding: 4px; border: 1px solid var(--border-color)">
                             <option value="user" ${u.role === 'user' ? 'selected':''}>User</option>
@@ -438,9 +490,9 @@ async function carregarTodasPerguntas() {
             const id = docSnap.id;
             html += `
                 <div style="border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px; border-radius: 8px;">
-                    <p><strong>De:</strong> ${p.nome}</p>
-                    <p><strong>Pergunta:</strong> ${p.texto}</p>
-                    ${p.status === 'respondida' ? `<div style="margin-top: 10px; padding: 10px; background: var(--bg-dark); border-left: 2px solid var(--accent);"><small style="color:var(--text-muted)">Sua Resposta Publicada:</small><br> ${p.resposta}</div>` : ''}
+                    <p><strong>De:</strong> ${escapeHTML(p.nome)}</p>
+                    <p><strong>Pergunta:</strong> ${escapeHTML(p.texto)}</p>
+                    ${p.status === 'respondida' ? `<div style="margin-top: 10px; padding: 10px; background: var(--bg-dark); border-left: 2px solid var(--accent);"><small style="color:var(--text-muted)">Sua Resposta Publicada:</small><br> ${escapeHTML(p.resposta)}</div>` : ''}
                     
                     <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
                         ${p.status !== 'respondida' ? `
@@ -540,8 +592,8 @@ async function carregarProjetosAdmin() {
             html += `
                 <div style="border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <strong>${p.titulo}</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Tags: ${p.tags || '-'}</div>
+                        <strong>${escapeHTML(p.titulo)}</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Tags: ${escapeHTML(p.tags || '-')}</div>
                     </div>
                     <div>
                         <button class="action-btn" onclick="window.prepararEdicao('${safeObj}')">Editar</button>
@@ -652,8 +704,8 @@ async function carregarCertificadosAdmin() {
             html += `
                 <div style="border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <strong>${c.titulo}</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Emissor: ${c.emissor}</div>
+                        <strong>${escapeHTML(c.titulo)}</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Emissor: ${escapeHTML(c.emissor)}</div>
                     </div>
                     <div>
                         <button class="action-btn" onclick="window.prepararEdicaoCertificado('${safeObj}')">Editar</button>

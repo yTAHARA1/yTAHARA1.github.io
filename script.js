@@ -39,6 +39,149 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+    // ====== TERMINAL TYPING EFFECT ======
+    const titleEl = document.getElementById("hero-title");
+    const subtitleEl = document.getElementById("hero-subtitle");
+    const skipBtn = document.getElementById("btn-skip-typing");
+
+    if (titleEl && subtitleEl) {
+        const titleHtml = titleEl.innerHTML;
+        const subtitleHtml = subtitleEl.innerHTML;
+        
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        if (prefersReducedMotion) {
+            // Show immediately
+            titleEl.innerHTML = titleHtml;
+            subtitleEl.innerHTML = subtitleHtml;
+        } else {
+            // Set up containers
+            titleEl.innerHTML = "";
+            subtitleEl.innerHTML = "";
+            if (skipBtn) skipBtn.style.display = "inline-block";
+
+            let titleIndex = 0;
+            let subtitleIndex = 0;
+            let titleTimer = null;
+            let subtitleTimer = null;
+            
+            // Add cursor
+            const cursor = document.createElement("span");
+            cursor.className = "terminal-cursor";
+            titleEl.appendChild(cursor);
+
+            function typeTitle() {
+                if (titleIndex < titleHtml.length) {
+                    // Remove cursor temporarily to insert text
+                    cursor.remove();
+                    if (titleHtml[titleIndex] === '<') {
+                        const endTag = titleHtml.indexOf('>', titleIndex);
+                        if (endTag !== -1) {
+                            titleEl.innerHTML += titleHtml.substring(titleIndex, endTag + 1);
+                            titleIndex = endTag + 1;
+                        } else {
+                            titleEl.innerHTML += titleHtml[titleIndex];
+                            titleIndex++;
+                        }
+                    } else {
+                        titleEl.innerHTML += titleHtml[titleIndex];
+                        titleIndex++;
+                    }
+                    titleEl.appendChild(cursor);
+                    titleTimer = setTimeout(typeTitle, 25);
+                } else {
+                    // Title done, move cursor to subtitle
+                    cursor.remove();
+                    subtitleEl.appendChild(cursor);
+                    typeSubtitle();
+                }
+            }
+
+            function typeSubtitle() {
+                if (subtitleIndex < subtitleHtml.length) {
+                    cursor.remove();
+                    if (subtitleHtml[subtitleIndex] === '<') {
+                        const endTag = subtitleHtml.indexOf('>', subtitleIndex);
+                        if (endTag !== -1) {
+                            subtitleEl.innerHTML += subtitleHtml.substring(subtitleIndex, endTag + 1);
+                            subtitleIndex = endTag + 1;
+                        } else {
+                            subtitleEl.innerHTML += subtitleHtml[subtitleIndex];
+                            subtitleIndex++;
+                        }
+                    } else {
+                        subtitleEl.innerHTML += subtitleHtml[subtitleIndex];
+                        subtitleIndex++;
+                    }
+                    subtitleEl.appendChild(cursor);
+                    subtitleTimer = setTimeout(typeSubtitle, 15);
+                } else {
+                    // Complete
+                    finishTyping();
+                }
+            }
+
+            function finishTyping() {
+                clearTimeout(titleTimer);
+                clearTimeout(subtitleTimer);
+                cursor.remove();
+                titleEl.innerHTML = titleHtml;
+                subtitleEl.innerHTML = subtitleHtml;
+                if (skipBtn) skipBtn.style.display = "none";
+                document.removeEventListener("keydown", handleEscKey);
+            }
+
+            function handleEscKey(e) {
+                if (e.key === "Escape") {
+                    finishTyping();
+                }
+            }
+
+            if (skipBtn) {
+                skipBtn.addEventListener("click", finishTyping);
+            }
+            document.addEventListener("keydown", handleEscKey);
+
+            // Start typing
+            typeTitle();
+        }
+    }
+
+
+    // ====== WINDOW CONTROL ACTIONS (CLOSE DOT & ESCAPE) ======
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("close") && e.target.closest(".window-pane")) {
+            const pane = e.target.closest(".window-pane");
+            const parentSection = pane.closest(".spa-section");
+            if (parentSection) {
+                parentSection.style.display = "none";
+                window.location.hash = "home";
+                const homeSec = document.getElementById("home");
+                if (homeSec) homeSec.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                pane.style.display = "none";
+            }
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            const activeSections = document.querySelectorAll(".spa-section");
+            activeSections.forEach(sec => {
+                if (sec.style.display === "block" || sec.style.display === "") {
+                    if (sec.id === "login" || sec.id === "admin" || sec.id === "perguntas") {
+                        sec.style.display = "none";
+                        window.location.hash = "home";
+                        const homeSec = document.getElementById("home");
+                        if (homeSec) homeSec.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+    });
+
+
     console.log("%c>>> Inicializando ambiente Emilio Tahara", "color: #00ff88; font-weight: bold; font-family: monospace; font-size: 14px;");
     console.log("%c[OK] Infraestrutura pronta.", "color: #00ff88; font-family: monospace;");
     console.log("%c[OK] Segurança validada.", "color: #00ff88; font-family: monospace;");

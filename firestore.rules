@@ -15,8 +15,11 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // Qualquer um pode criar seu perfil NA HORA DO CADASTRO
-      allow create: if request.auth != null && request.auth.uid == userId;
+      // Criação de perfil restrita: OBRIGATÓRIO que a role seja 'user'
+      // Previne "Escalada de Privilégios" se um hacker tentar forçar role='admin'
+      allow create: if request.auth != null 
+                    && request.auth.uid == userId 
+                    && request.resource.data.role == "user";
       // Usuário lê o próprio, Admin lê de todos
       allow read: if request.auth.uid == userId || isAdmin();
       // Apenas Admin pode atualizar (ex: mudar roles) e deletar
@@ -36,11 +39,17 @@ service cloud.firestore {
     }
     
     match /perguntas/{perguntaId} {
-      allow create: if isRegisteredAndActive();
+      // Validação Estrita (Backend): Verifica tipo, tamanho máximo (1000 chars) e força status pendente no envio
+      allow create: if isRegisteredAndActive()
+                    && request.resource.data.texto is string
+                    && request.resource.data.texto.size() > 0
+                    && request.resource.data.texto.size() <= 1000
+                    && request.resource.data.status == "pendente";
       // Qualquer pessoa pode LER as perguntas na vitrine pública
       allow read: if true;
       allow update: if isAdmin();
-      allow delete: if request.auth.uid == resource.data.uid || isAdmin();
+      // O autor pode deletar sua própria pergunta se ainda existir, e Admin pode deletar
+      allow delete: if (request.auth != null && request.auth.uid == resource.data.uid) || isAdmin();
     }
   }
 }

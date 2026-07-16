@@ -34,15 +34,31 @@
     <section class="hero" id="home">
         <div class="container hero-content">
             <div class="hero-text reveal">
-                <p class="overline"><span class="accent">></span> Olá, mundo.</p>
-                <h1>A disciplina do tatame aplicada à vanguarda da <span class="accent delay-1">Infraestrutura</span> e
-                    <span class="accent delay-2">Automação.</span>
-                </h1>
-                <p class="subtitle">Eu sou Emilio Tahara. Aos 16 anos, atuo na infraestrutura interna da Solinftec,
-                    unindo hardware, compliance e dados.</p>
-                <div class="hero-actions">
-                    <a href="#projeto" class="btn-primary">Ver Projeto em Destaque</a>
-                    <a href="#sobre" class="btn-secondary">Conhecer Meu Perfil</a>
+                <div class="window-pane terminal-window" tabindex="0">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="control-dot close"></span>
+                            <span class="control-dot minimize"></span>
+                            <span class="control-dot maximize"></span>
+                        </div>
+                        <span class="window-title">bash - emilio@tahara.dev</span>
+                    </div>
+                    <div class="window-body terminal-body">
+                        <div class="terminal-logs" style="font-size: 0.8rem; margin-bottom: 1.5rem; border-bottom: 1px dashed var(--border); padding-bottom: 1rem; line-height: 1.4; font-family: 'JetBrains Mono', monospace;">
+                            <span class="text-muted">[etahara_kernel v2.6.7 init]</span><br>
+                            <span style="color: var(--danger)">[ERR] Connection refused to legacy_ad.sys</span><br>
+                            <span style="color: var(--warning)">[WARN] Deprecated dependency in data_sync module</span><br>
+                            <span style="color: var(--accent-green)">[OK] Security posture validated. Level: Maximum</span>
+                        </div>
+                        <p class="overline"><span class="accent">></span> Olá, mundo.</p>
+                        <h1 id="hero-title">A disciplina do tatame aplicada à vanguarda da <span class="accent">Infraestrutura</span> e <span class="accent">Automação.</span></h1>
+                        <p class="subtitle" id="hero-subtitle">Eu sou Emilio Tahara. Aos 16 anos, atuo na infraestrutura interna da Solinftec, unindo hardware, compliance e dados.</p>
+                        <div class="hero-actions">
+                            <a href="#projeto" class="btn-primary">Ver Case Studies</a>
+                            <a href="#sobre" class="btn-secondary">Conhecer Meu Perfil</a>
+                            <button id="btn-skip-typing" class="btn-skip" aria-label="Pular efeito de digitação" style="display: none;">Pular [Esc]</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -79,42 +95,72 @@
             <h2 class="section-title reveal">Minhas <span class="accent">Especialidades</span></h2>
 
             <div class="grid-especialidades">
-                <div class="card reveal delay-1">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                        </svg>
+                <div class="window-pane reveal delay-1" tabindex="0">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="control-dot close"></span>
+                            <span class="control-dot minimize"></span>
+                            <span class="control-dot maximize"></span>
+                        </div>
+                        <span class="window-title">infra_config.sh</span>
                     </div>
-                    <h3>Infraestrutura & Hardware</h3>
-                    <p>Montagem, manutenção avançada e domínio completo no ecossistema corporativo Windows (Active
-                        Directory, gestão de ativos).</p>
+                    <div class="window-body">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                                <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                            </svg>
+                        </div>
+                        <h3>Infraestrutura & Hardware</h3>
+                        <p>Montagem, manutenção avançada e domínio completo no ecossistema corporativo Windows (Active
+                            Directory, gestão de ativos).</p>
+                    </div>
                 </div>
-                <div class="card reveal delay-2">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                        </svg>
+                <div class="window-pane reveal delay-2" tabindex="0">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="control-dot close"></span>
+                            <span class="control-dot minimize"></span>
+                            <span class="control-dot maximize"></span>
+                        </div>
+                        <span class="window-title">compliance_policy.conf</span>
                     </div>
-                    <h3>Compliance & Segurança</h3>
-                    <p>Gestão rigorosa de softwares corporativos, garantindo aderência a políticas de segurança interna
-                        e proteção de dados sensíveis.</p>
+                    <div class="window-body">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <h3>Compliance & Segurança</h3>
+                        <p>Gestão rigorosa de softwares corporativos, garantindo aderência a políticas de segurança interna
+                            e proteção de dados sensíveis.</p>
+                    </div>
                 </div>
-                <div class="card reveal delay-3">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="4 17 10 11 4 5"></polyline>
-                            <line x1="12" y1="19" x2="20" y2="19"></line>
-                        </svg>
+                <div class="window-pane reveal delay-3" tabindex="0">
+                    <div class="window-header">
+                        <div class="window-controls">
+                            <span class="control-dot close"></span>
+                            <span class="control-dot minimize"></span>
+                            <span class="control-dot maximize"></span>
+                        </div>
+                        <span class="window-title">automation_script.py</span>
                     </div>
-                    <h3>Automação & Scripting</h3>
-                    <p>Desenvolvimento em Python focado em performance, eliminação de gargalos repetitivos e integração
-                        entre plataformas de dados.</p>
+                    <div class="window-body">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 17 10 11 4 5"></polyline>
+                                <line x1="12" y1="19" x2="20" y2="19"></line>
+                            </svg>
+                        </div>
+                        <h3>Automação & Scripting</h3>
+                        <p>Desenvolvimento em Python focado em performance, eliminação de gargalos repetitivos e integração
+                            entre plataformas de dados.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,24 +192,34 @@
     <!-- ======== ÁREA DE LOGIN/REGISTRO ======== -->
     <section class="spa-section" id="login" style="display: none;">
         <div class="container auth-container">
-            <div class="auth-box border-glow">
-                <h2 id="auth-title">Login</h2>
-                <form id="auth-form">
-                    <div class="input-group" id="name-group" style="display: none;">
-                        <label>Nome</label>
-                        <input type="text" id="auth-nome" placeholder="Seu nome">
+            <div class="window-pane auth-box" style="width: 100%; max-width: 450px;" tabindex="0">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control-dot close"></span>
+                        <span class="control-dot minimize"></span>
+                        <span class="control-dot maximize"></span>
                     </div>
-                    <div class="input-group">
-                        <label>E-mail</label>
-                        <input type="email" id="auth-email" required placeholder="admin@exemplo.com">
-                    </div>
-                    <div class="input-group">
-                        <label>Senha</label>
-                        <input type="password" id="auth-senha" minlength="8" required placeholder="mínimo 8 caracteres">
-                    </div>
-                    <button type="submit" class="btn-primary w-100" id="auth-submit">Entrar</button>
-                    <p class="auth-switch">Não tem conta? <a href="#" id="toggle-auth">Cadastre-se</a></p>
-                </form>
+                    <span class="window-title">user_auth.exe</span>
+                </div>
+                <div class="window-body">
+                    <h2 id="auth-title" style="margin-bottom: 2rem; font-size: 2.2rem; text-align: center;">Login</h2>
+                    <form id="auth-form">
+                        <div class="input-group" id="name-group" style="display: none;">
+                            <label>Nome</label>
+                            <input type="text" id="auth-nome" placeholder="Seu nome">
+                        </div>
+                        <div class="input-group">
+                            <label>E-mail</label>
+                            <input type="email" id="auth-email" required placeholder="admin@exemplo.com">
+                        </div>
+                        <div class="input-group">
+                            <label>Senha</label>
+                            <input type="password" id="auth-senha" minlength="8" required placeholder="mínimo 8 caracteres">
+                        </div>
+                        <button type="submit" class="btn-primary w-100" id="auth-submit">Entrar</button>
+                        <p class="auth-switch">Não tem conta? <a href="#" id="toggle-auth">Cadastre-se</a></p>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -172,8 +228,16 @@
     <section class="spa-section" id="perguntas" style="display: none;">
         <div class="container">
             <h2 class="section-title">Q&A do <span class="accent">Blog</span></h2>
-            <div class="projeto-content border-glow form-section">
-                <div class="projeto-text">
+            <div class="window-pane form-section" tabindex="0">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control-dot close"></span>
+                        <span class="control-dot minimize"></span>
+                        <span class="control-dot maximize"></span>
+                    </div>
+                    <span class="window-title">send_question.sh</span>
+                </div>
+                <div class="window-body">
                     <h3>Envie sua pergunta</h3>
                     <form id="pergunta-form">
                         <div class="input-group">
@@ -202,8 +266,16 @@
                 <button class="btn-secondary tab-btn" data-tab="admin-perguntas">Perguntas</button>
             </div>
 
-            <div id="admin-projetos" class="tab-content active border-glow projeto-content">
-                <div class="projeto-text">
+            <div id="admin-projetos" class="tab-content active window-pane">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control-dot close"></span>
+                        <span class="control-dot minimize"></span>
+                        <span class="control-dot maximize"></span>
+                    </div>
+                    <span class="window-title">admin_projects.db</span>
+                </div>
+                <div class="window-body">
                     <h3 id="form-proj-title">Adicionar Novo Case Study</h3>
                     <form id="form-novo-projeto">
                         <input type="hidden" id="proj-id">
@@ -230,8 +302,16 @@
                 </div>
             </div>
 
-            <div id="admin-certificados" class="tab-content border-glow projeto-content" style="display: none;">
-                <div class="projeto-text">
+            <div id="admin-certificados" class="tab-content window-pane" style="display: none;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control-dot close"></span>
+                        <span class="control-dot minimize"></span>
+                        <span class="control-dot maximize"></span>
+                    </div>
+                    <span class="window-title">admin_certificates.db</span>
+                </div>
+                <div class="window-body">
                     <h3 id="form-cert-title">Adicionar Novo Certificado</h3>
                     <form id="form-novo-certificado">
                         <input type="hidden" id="cert-id">
@@ -255,8 +335,16 @@
                 </div>
             </div>
 
-            <div id="admin-usuarios" class="tab-content border-glow projeto-content" style="display: none;">
-                <div class="projeto-text">
+            <div id="admin-usuarios" class="tab-content window-pane" style="display: none;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control-dot close"></span>
+                        <span class="control-dot minimize"></span>
+                        <span class="control-dot maximize"></span>
+                    </div>
+                    <span class="window-title">admin_users.db</span>
+                </div>
+                <div class="window-body">
                     <h3>Gerenciar Usuários</h3>
                     <div class="table-container">
                         <table class="admin-table">
@@ -274,8 +362,16 @@
                 </div>
             </div>
 
-            <div id="admin-perguntas" class="tab-content border-glow projeto-content" style="display: none;">
-                <div class="projeto-text">
+            <div id="admin-perguntas" class="tab-content window-pane" style="display: none;">
+                <div class="window-header">
+                    <div class="window-controls">
+                        <span class="control-dot close"></span>
+                        <span class="control-dot minimize"></span>
+                        <span class="control-dot maximize"></span>
+                    </div>
+                    <span class="window-title">admin_questions.db</span>
+                </div>
+                <div class="window-body">
                     <h3>Gerenciar Perguntas</h3>
                     <div id="lista-todas-perguntas"></div>
                 </div>
