@@ -31,6 +31,16 @@ function escapeHTML(str) {
         .replace(/'/g, '&#039;');
 }
 
+function sanitizeURL(url) {
+    if (!url) return '';
+    const trimmed = url.trim();
+    // Apenas permitir links absolutos http/https ou caminhos relativos/âncoras seguros
+    if (/^(https?:\/\/|\/|#)/i.test(trimmed)) {
+        return trimmed;
+    }
+    return '#';
+}
+
 // ====== ESTADO GLOBAL ======
 let currentUser = null;
 let currentRole = "user";
@@ -153,6 +163,14 @@ toggleAuth.addEventListener("click", (e) => {
 
 authForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Verificação de Honeypot anti-spam
+    const honeypot = document.getElementById("auth-honeypot")?.value;
+    if (honeypot) {
+        console.warn("Autenticação bloqueada: spam detectado (honeypot preenchido).");
+        return;
+    }
+
     const email = document.getElementById("auth-email").value.trim();
     const senha = document.getElementById("auth-senha").value.trim();
     
@@ -215,20 +233,20 @@ async function carregarProjetosPublicos() {
                 <div class="window-pane reveal active" tabindex="0">
                     <div class="window-header">
                         <div class="window-controls">
-                            <span class="control-dot close"></span>
-                            <span class="control-dot minimize"></span>
-                            <span class="control-dot maximize"></span>
+                            <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                            <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                            <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                         </div>
                         <span class="window-title">case_study_${id.substring(0, 6)}.json</span>
                     </div>
                     <div class="window-body">
-                        ${p.imagemURL ? `<img src="${escapeHTML(p.imagemURL)}" alt="${escapeHTML(p.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                        ${p.imagemURL ? `<img src="${escapeHTML(sanitizeURL(p.imagemURL))}" alt="${escapeHTML(p.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
                         <div class="tech-stack" style="margin-bottom:1rem;">
                             ${p.tags ? escapeHTML(p.tags).split(',').map(t => `<span class="badge">${t.trim()}</span>`).join('') : ''}
                         </div>
                         <h3>${escapeHTML(p.titulo)}</h3>
                         <p style="margin-bottom:1rem;">${escapeHTML(p.descricao)}</p>
-                        ${p.link ? `<a href="${escapeHTML(p.link)}" target="_blank" class="btn-outline" style="display:inline-block">Ver Projeto</a>` : ''}
+                        ${p.link ? `<a href="${escapeHTML(sanitizeURL(p.link))}" target="_blank" class="btn-outline" style="display:inline-block">Ver Projeto</a>` : ''}
                     </div>
                 </div>
             `;
@@ -256,9 +274,9 @@ function carregarQnAPublico() {
                     <div class="window-pane reveal active" style="border-left: 3px solid var(--accent-green); display: flex; flex-direction: column; justify-content: space-between;" tabindex="0">
                         <div class="window-header">
                             <div class="window-controls">
-                                <span class="control-dot close"></span>
-                                <span class="control-dot minimize"></span>
-                                <span class="control-dot maximize"></span>
+                                <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                                <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                                <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                             </div>
                             <span class="window-title">qna_public_${doc.id.substring(0, 6)}.log</span>
                         </div>
@@ -309,19 +327,19 @@ async function carregarCertificadosPublicos() {
                 <div class="window-pane reveal active" tabindex="0">
                     <div class="window-header">
                         <div class="window-controls">
-                            <span class="control-dot close"></span>
-                            <span class="control-dot minimize"></span>
-                            <span class="control-dot maximize"></span>
+                            <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                            <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                            <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                         </div>
                         <span class="window-title">certificate_${doc.id.substring(0, 6)}.crt</span>
                     </div>
                     <div class="window-body">
-                        ${c.imagemURL ? `<img src="${escapeHTML(c.imagemURL)}" alt="${escapeHTML(c.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                        ${c.imagemURL ? `<img src="${escapeHTML(sanitizeURL(c.imagemURL))}" alt="${escapeHTML(c.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
                         <div class="tech-stack" style="margin-bottom:1rem;">
                             <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-primary)">${escapeHTML(c.emissor)}</span>
                         </div>
                         <h3 style="margin-bottom: 1rem;">${escapeHTML(c.titulo)}</h3>
-                        ${c.link ? `<a href="${escapeHTML(c.link)}" target="_blank" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
+                        ${c.link ? `<a href="${escapeHTML(sanitizeURL(c.link))}" target="_blank" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
                     </div>
                 </div>
             `;
@@ -340,6 +358,23 @@ const formPergunta = document.getElementById("pergunta-form");
 formPergunta.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!currentUser) return;
+
+    // Verificação de Honeypot anti-spam
+    const honeypot = document.getElementById("pergunta-honeypot")?.value;
+    if (honeypot) {
+        console.warn("Envio bloqueado: spam detectado (honeypot preenchido).");
+        return;
+    }
+
+    // Rate Limiting no cliente (30 segundos entre envios)
+    const LAST_SUBMISSION_KEY = `last_q_submit_${currentUser.uid}`;
+    const lastSubmitTime = localStorage.getItem(LAST_SUBMISSION_KEY);
+    const now = Date.now();
+    if (lastSubmitTime && (now - parseInt(lastSubmitTime)) < 30000) {
+        const secondsLeft = Math.ceil((30000 - (now - parseInt(lastSubmitTime))) / 1000);
+        alert(`Aguarde ${secondsLeft} segundos antes de enviar outra pergunta para evitar spam.`);
+        return;
+    }
 
     const texto = document.getElementById("pergunta-texto").value.trim();
     if (!texto || texto.length > 1000) {
@@ -360,6 +395,8 @@ formPergunta.addEventListener("submit", async (e) => {
             dataHora: new Date().toISOString(),
             status: "pendente"
         });
+        // Atualiza o timestamp do último envio com sucesso
+        localStorage.setItem(LAST_SUBMISSION_KEY, Date.now().toString());
         alert("Pergunta enviada com sucesso!");
         formPergunta.reset();
         carregarMinhasPerguntas();
@@ -411,11 +448,11 @@ formProjeto.addEventListener("submit", async (e) => {
     if (currentRole !== "admin") return;
 
     const id = document.getElementById("proj-id").value;
-    const titulo = document.getElementById("proj-titulo").value;
-    const tags = document.getElementById("proj-tags").value;
-    const link = document.getElementById("proj-link").value;
-    const descricao = document.getElementById("proj-descricao").value;
-    const imagemURL = document.getElementById("proj-imagem").value;
+    const titulo = document.getElementById("proj-titulo").value.trim();
+    const tags = document.getElementById("proj-tags").value.trim();
+    const link = sanitizeURL(document.getElementById("proj-link").value.trim());
+    const descricao = document.getElementById("proj-descricao").value.trim();
+    const imagemURL = sanitizeURL(document.getElementById("proj-imagem").value.trim());
 
     try {
         btnSubmitProj.innerText = "Salvando...";
@@ -654,10 +691,10 @@ if(formCertificado) {
         if (currentRole !== "admin") return;
 
         const id = document.getElementById("cert-id").value;
-        const titulo = document.getElementById("cert-titulo").value;
-        const emissor = document.getElementById("cert-emissor").value;
-        const link = document.getElementById("cert-link").value;
-        const imagemURL = document.getElementById("cert-imagem").value;
+        const titulo = document.getElementById("cert-titulo").value.trim();
+        const emissor = document.getElementById("cert-emissor").value.trim();
+        const link = sanitizeURL(document.getElementById("cert-link").value.trim());
+        const imagemURL = sanitizeURL(document.getElementById("cert-imagem").value.trim());
 
         try {
             btnSubmitCert.innerText = "Salvando...";

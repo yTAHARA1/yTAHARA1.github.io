@@ -7,6 +7,8 @@
     <title>Emilio Tahara | Infraestrutura e Automação</title>
     <meta name="description"
         content="Portfólio de Emilio Tahara - Infraestrutura, Automação Corporativa e Resiliência.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -37,9 +39,9 @@
                 <div class="window-pane terminal-window" tabindex="0">
                     <div class="window-header">
                         <div class="window-controls">
-                            <span class="control-dot close"></span>
-                            <span class="control-dot minimize"></span>
-                            <span class="control-dot maximize"></span>
+                            <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                            <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                            <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                         </div>
                         <span class="window-title">bash - emilio@tahara.dev</span>
                     </div>
@@ -98,9 +100,9 @@
                 <div class="window-pane reveal delay-1" tabindex="0">
                     <div class="window-header">
                         <div class="window-controls">
-                            <span class="control-dot close"></span>
-                            <span class="control-dot minimize"></span>
-                            <span class="control-dot maximize"></span>
+                            <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                            <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                            <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                         </div>
                         <span class="window-title">infra_config.sh</span>
                     </div>
@@ -122,9 +124,9 @@
                 <div class="window-pane reveal delay-2" tabindex="0">
                     <div class="window-header">
                         <div class="window-controls">
-                            <span class="control-dot close"></span>
-                            <span class="control-dot minimize"></span>
-                            <span class="control-dot maximize"></span>
+                            <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                            <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                            <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                         </div>
                         <span class="window-title">compliance_policy.conf</span>
                     </div>
@@ -143,9 +145,9 @@
                 <div class="window-pane reveal delay-3" tabindex="0">
                     <div class="window-header">
                         <div class="window-controls">
-                            <span class="control-dot close"></span>
-                            <span class="control-dot minimize"></span>
-                            <span class="control-dot maximize"></span>
+                            <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                            <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                            <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                         </div>
                         <span class="window-title">automation_script.py</span>
                     </div>
@@ -195,15 +197,19 @@
             <div class="window-pane auth-box" style="width: 100%; max-width: 450px;" tabindex="0">
                 <div class="window-header">
                     <div class="window-controls">
-                        <span class="control-dot close"></span>
-                        <span class="control-dot minimize"></span>
-                        <span class="control-dot maximize"></span>
+                        <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                        <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                        <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                     </div>
                     <span class="window-title">user_auth.exe</span>
                 </div>
                 <div class="window-body">
                     <h2 id="auth-title" style="margin-bottom: 2rem; font-size: 2.2rem; text-align: center;">Login</h2>
                     <form id="auth-form">
+                        <!-- Honeypot anti-spam -->
+                        <div style="display: none !important;">
+                            <input type="text" id="auth-honeypot" tabindex="-1" autocomplete="off">
+                        </div>
                         <div class="input-group" id="name-group" style="display: none;">
                             <label>Nome</label>
                             <input type="text" id="auth-nome" placeholder="Seu nome">
@@ -231,15 +237,19 @@
             <div class="window-pane form-section" tabindex="0">
                 <div class="window-header">
                     <div class="window-controls">
-                        <span class="control-dot close"></span>
-                        <span class="control-dot minimize"></span>
-                        <span class="control-dot maximize"></span>
+                        <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                        <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                        <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                     </div>
                     <span class="window-title">send_question.sh</span>
                 </div>
                 <div class="window-body">
                     <h3>Envie sua pergunta</h3>
                     <form id="pergunta-form">
+                        <!-- Honeypot anti-spam -->
+                        <div style="display: none !important;">
+                            <input type="text" id="pergunta-honeypot" tabindex="-1" autocomplete="off">
+                        </div>
                         <div class="input-group">
                             <textarea id="pergunta-texto" rows="4" required
                                 placeholder="O que você quer saber sobre infraestrutura, python ou carreira?"></textarea>
@@ -269,9 +279,9 @@
             <div id="admin-projetos" class="tab-content active window-pane">
                 <div class="window-header">
                     <div class="window-controls">
-                        <span class="control-dot close"></span>
-                        <span class="control-dot minimize"></span>
-                        <span class="control-dot maximize"></span>
+                        <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                        <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                        <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                     </div>
                     <span class="window-title">admin_projects.db</span>
                 </div>
@@ -305,9 +315,9 @@
             <div id="admin-certificados" class="tab-content window-pane" style="display: none;">
                 <div class="window-header">
                     <div class="window-controls">
-                        <span class="control-dot close"></span>
-                        <span class="control-dot minimize"></span>
-                        <span class="control-dot maximize"></span>
+                        <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                        <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                        <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                     </div>
                     <span class="window-title">admin_certificates.db</span>
                 </div>
@@ -338,9 +348,9 @@
             <div id="admin-usuarios" class="tab-content window-pane" style="display: none;">
                 <div class="window-header">
                     <div class="window-controls">
-                        <span class="control-dot close"></span>
-                        <span class="control-dot minimize"></span>
-                        <span class="control-dot maximize"></span>
+                        <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                        <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                        <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                     </div>
                     <span class="window-title">admin_users.db</span>
                 </div>
@@ -365,9 +375,9 @@
             <div id="admin-perguntas" class="tab-content window-pane" style="display: none;">
                 <div class="window-header">
                     <div class="window-controls">
-                        <span class="control-dot close"></span>
-                        <span class="control-dot minimize"></span>
-                        <span class="control-dot maximize"></span>
+                        <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
+                        <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
+                        <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
                     </div>
                     <span class="window-title">admin_questions.db</span>
                 </div>
@@ -395,7 +405,7 @@
                     </svg>
                     LinkedIn
                 </a>
-                <a href="https://github.com/yTAHARA1/" class="social-btn" target="_blank" aria-label="GitHub">
+                <a href="#" class="social-btn" target="_blank" aria-label="GitHub">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path

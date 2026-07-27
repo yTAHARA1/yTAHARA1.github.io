@@ -44,19 +44,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const subtitleEl = document.getElementById("hero-subtitle");
     const skipBtn = document.getElementById("btn-skip-typing");
 
+    // Configurações do efeito de digitação (facilmente customizáveis)
+    const TYPING_CONFIG = {
+        titleSpeed: 20,     // Velocidade do título (ms por caractere)
+        subtitleSpeed: 10,  // Velocidade do subtítulo (ms por caractere)
+        enabled: true       // Define se a animação está ligada
+    };
+
     if (titleEl && subtitleEl) {
         const titleHtml = titleEl.innerHTML;
         const subtitleHtml = subtitleEl.innerHTML;
         
-        // Check for reduced motion preference
+        // Verifica preferência do sistema por movimento reduzido (acessibilidade)
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
-        if (prefersReducedMotion) {
-            // Show immediately
+        if (prefersReducedMotion || !TYPING_CONFIG.enabled) {
+            // Mostra o texto imediatamente
             titleEl.innerHTML = titleHtml;
             subtitleEl.innerHTML = subtitleHtml;
+            if (skipBtn) skipBtn.style.display = "none";
         } else {
-            // Set up containers
+            // Medir alturas para evitar CLS (Cumulative Layout Shift)
+            const titleHeight = titleEl.getBoundingClientRect().height;
+            const subtitleHeight = subtitleEl.getBoundingClientRect().height;
+            titleEl.style.minHeight = `${titleHeight}px`;
+            subtitleEl.style.minHeight = `${subtitleHeight}px`;
+
+            // Limpa os contêineres e exibe o botão de pular
             titleEl.innerHTML = "";
             subtitleEl.innerHTML = "";
             if (skipBtn) skipBtn.style.display = "inline-block";
@@ -66,14 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
             let titleTimer = null;
             let subtitleTimer = null;
             
-            // Add cursor
+            // Adiciona o cursor piscante
             const cursor = document.createElement("span");
             cursor.className = "terminal-cursor";
             titleEl.appendChild(cursor);
 
             function typeTitle() {
                 if (titleIndex < titleHtml.length) {
-                    // Remove cursor temporarily to insert text
                     cursor.remove();
                     if (titleHtml[titleIndex] === '<') {
                         const endTag = titleHtml.indexOf('>', titleIndex);
@@ -89,9 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         titleIndex++;
                     }
                     titleEl.appendChild(cursor);
-                    titleTimer = setTimeout(typeTitle, 25);
+                    titleTimer = setTimeout(typeTitle, TYPING_CONFIG.titleSpeed);
                 } else {
-                    // Title done, move cursor to subtitle
+                    // Título concluído, move o cursor para o subtítulo
                     cursor.remove();
                     subtitleEl.appendChild(cursor);
                     typeSubtitle();
@@ -115,9 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         subtitleIndex++;
                     }
                     subtitleEl.appendChild(cursor);
-                    subtitleTimer = setTimeout(typeSubtitle, 15);
+                    subtitleTimer = setTimeout(typeSubtitle, TYPING_CONFIG.subtitleSpeed);
                 } else {
-                    // Complete
                     finishTyping();
                 }
             }
@@ -128,6 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 cursor.remove();
                 titleEl.innerHTML = titleHtml;
                 subtitleEl.innerHTML = subtitleHtml;
+                
+                // Limpa min-height para manter o layout flexível e responsivo pós-renderização
+                titleEl.style.minHeight = "";
+                subtitleEl.style.minHeight = "";
+                
                 if (skipBtn) skipBtn.style.display = "none";
                 document.removeEventListener("keydown", handleEscKey);
             }
@@ -143,16 +160,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             document.addEventListener("keydown", handleEscKey);
 
-            // Start typing
+            // Inicia o processo de digitação
             typeTitle();
         }
     }
 
 
-    // ====== WINDOW CONTROL ACTIONS (CLOSE DOT & ESCAPE) ======
-    document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("close") && e.target.closest(".window-pane")) {
-            const pane = e.target.closest(".window-pane");
+    // ====== WINDOW CONTROL ACTIONS ======
+    const handleWindowControl = (action, pane) => {
+        if (!pane) return;
+        if (action === "close") {
             const parentSection = pane.closest(".spa-section");
             if (parentSection) {
                 parentSection.style.display = "none";
@@ -162,11 +179,50 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 pane.style.display = "none";
             }
+        } else if (action === "minimize") {
+            pane.classList.toggle("minimized");
+            pane.classList.remove("maximized");
+        } else if (action === "maximize") {
+            pane.classList.toggle("maximized");
+            pane.classList.remove("minimized");
+        }
+    };
+
+    document.addEventListener("click", (e) => {
+        const dot = e.target.closest(".control-dot");
+        if (dot) {
+            const pane = dot.closest(".window-pane");
+            if (pane) {
+                if (dot.classList.contains("close")) handleWindowControl("close", pane);
+                if (dot.classList.contains("minimize")) handleWindowControl("minimize", pane);
+                if (dot.classList.contains("maximize")) handleWindowControl("maximize", pane);
+            }
         }
     });
 
     document.addEventListener("keydown", (e) => {
+        // Suporte para teclado nos botões de controle focados (Enter ou Espaço)
+        const dot = e.target.closest(".control-dot");
+        if (dot && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            const pane = dot.closest(".window-pane");
+            if (pane) {
+                if (dot.classList.contains("close")) handleWindowControl("close", pane);
+                if (dot.classList.contains("minimize")) handleWindowControl("minimize", pane);
+                if (dot.classList.contains("maximize")) handleWindowControl("maximize", pane);
+            }
+            return;
+        }
+
+        // Suporte para Escape
         if (e.key === "Escape") {
+            // Se houver uma janela maximizada, desmaximiza ela primeiro
+            const maximizedPane = document.querySelector(".window-pane.maximized");
+            if (maximizedPane) {
+                maximizedPane.classList.remove("maximized");
+                return;
+            }
+
             const activeSections = document.querySelectorAll(".spa-section");
             activeSections.forEach(sec => {
                 if (sec.style.display === "block" || sec.style.display === "") {
