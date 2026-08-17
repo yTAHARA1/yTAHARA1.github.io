@@ -805,11 +805,13 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     letter-spacing: 2px;
 }
 
-.auth-box .input-group input:focus {
-    outline: none;
-    border-color: #00ff85;
-    background-color: #0c0d10;
-    box-shadow: 0 0 16px rgba(0, 223, 118, 0.45);
+.auth-box .input-group input:focus,
+.auth-box .input-group input:focus-visible {
+    outline: none !important;
+    outline-offset: 0 !important;
+    border-color: #00ff85 !important;
+    background-color: #0c0d10 !important;
+    box-shadow: 0 0 10px rgba(0, 223, 118, 0.4) !important;
 }
 
 /* Autofill styling override */
@@ -1095,13 +1097,24 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* Acessibilidade: Estado de foco visível e acessível */
 a:focus-visible,
-button:focus-visible,
-input:focus-visible,
+button:not(.auth-box *):focus-visible,
+input:not(.auth-box *):focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 .window-pane:not(.auth-box):focus-within {
     outline: 2px solid var(--accent-green) !important;
     outline-offset: 4px !important;
+}
+
+.auth-box,
+.auth-box *,
+.auth-box input,
+.auth-box input:focus,
+.auth-box input:focus-visible,
+.auth-box button:focus,
+.auth-box button:focus-visible {
+    outline: none !important;
+    outline-offset: 0 !important;
 }
 
 
