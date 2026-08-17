@@ -129,70 +129,192 @@ navLogout.addEventListener("click", async (e) => {
 
 // ====== LÓGICA DE LOGIN/REGISTRO ======
 let isRegistering = false;
-const toggleAuth = document.getElementById("toggle-auth");
-const authSwitchLabel = document.getElementById("auth-switch-label");
-const nameGroup = document.getElementById("name-group");
-const authTitle = document.getElementById("auth-title");
-const authSubmit = document.getElementById("auth-submit");
-const authForm = document.getElementById("auth-form");
 
+const toggleAuth        = document.getElementById("toggle-auth");
+const authSwitchLabel   = document.getElementById("auth-switch-label");
+const nameGroup         = document.getElementById("name-group");
+const authTitle         = document.getElementById("auth-title");
+const authSubmit        = document.getElementById("auth-submit");
+const authForm          = document.getElementById("auth-form");
+const authForgotWrap    = document.getElementById("auth-forgot-wrap");
+const authForgotLink    = document.getElementById("auth-forgot-link");
+const authVerifyBanner  = document.getElementById("auth-verify-banner");
+const authResendVerify  = document.getElementById("auth-resend-verify");
+const captchaQuestion   = document.getElementById("captcha-question");
+const captchaAnswer     = document.getElementById("captcha-answer");
+
+// ---- Captcha matemático ----
+let captchaExpected = 0;
+
+function gerarCaptcha() {
+    const ops = ['+', '-', '×'];
+    const op = ops[Math.floor(Math.random() * ops.length)];
+    let a, b, result;
+    if (op === '+') {
+        a = Math.floor(Math.random() * 10) + 1;
+        b = Math.floor(Math.random() * 10) + 1;
+        result = a + b;
+    } else if (op === '-') {
+        a = Math.floor(Math.random() * 10) + 5;
+        b = Math.floor(Math.random() * (a - 1)) + 1;
+        result = a - b;
+    } else {
+        a = Math.floor(Math.random() * 5) + 1;
+        b = Math.floor(Math.random() * 5) + 1;
+        result = a * b;
+    }
+    captchaExpected = result;
+    if (captchaQuestion) captchaQuestion.textContent = `${a} ${op} ${b} = ?`;
+    if (captchaAnswer) captchaAnswer.value = "";
+}
+
+gerarCaptcha(); // Gera captcha inicial
+
+// ---- Alternar Login / Cadastro ----
 toggleAuth.addEventListener("click", (e) => {
     e.preventDefault();
     isRegistering = !isRegistering;
+    if (authVerifyBanner) authVerifyBanner.classList.remove("visible");
     if (isRegistering) {
         authTitle.innerText = "Cadastre-se";
         authSubmit.innerText = "Criar Conta";
         nameGroup.style.display = "block";
         if (authSwitchLabel) authSwitchLabel.innerText = "Já tem conta?";
         toggleAuth.innerText = "Faça o login";
+        if (authForgotWrap) authForgotWrap.style.display = "none";
     } else {
         authTitle.innerText = "Login";
         authSubmit.innerText = "Entrar";
         nameGroup.style.display = "none";
         if (authSwitchLabel) authSwitchLabel.innerText = "Não tem conta?";
         toggleAuth.innerText = "Cadastre-se";
+        if (authForgotWrap) authForgotWrap.style.display = "";
     }
+    gerarCaptcha();
 });
 
+// ---- Esqueci minha senha ----
+if (authForgotLink) {
+    authForgotLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("auth-email").value.trim();
+        if (!email) {
+            alert("Digite seu e-mail no campo acima primeiro.");
+            return;
+        }
+        try {
+            await sendPasswordResetEmail(auth, email);
+            alert(`E-mail de redefinição de senha enviado para ${email}. Verifique sua caixa de entrada.`);
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao enviar e-mail de redefinição: " + error.message);
+        }
+    });
+}
+
+// ---- Reenviar verificação de e-mail ----
+if (authResendVerify) {
+    authResendVerify.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (auth.currentUser && !auth.currentUser.emailVerified) {
+            try {
+                await auth.currentUser.sendEmailVerification();
+                alert("E-mail de verificação reenviado! Verifique sua caixa de entrada.");
+            } catch (error) {
+                alert("Erro ao reenviar: " + error.message);
+            }
+        }
+    });
+}
+
+// ---- Submit do formulário ----
 authForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = document.getElementById("auth-email").value.trim();
     const senha = document.getElementById("auth-senha").value.trim();
-    
-    // Validação estrita Frontend
+
+    // Validação básica
     if (!email || !senha) {
         alert("E-mail e senha são obrigatórios!");
         return;
     }
-    
     if (senha.length < 8) {
-        alert("Sua senha precisa ter pelo menos 8 dígitos.");
+        alert("Sua senha precisa ter pelo menos 8 caracteres.");
         return;
     }
-    
+
+    // Validação do captcha
+    const respostaCaptcha = parseInt(captchaAnswer ? captchaAnswer.value : "NaN", 10);
+    if (isNaN(respostaCaptcha) || respostaCaptcha !== captchaExpected) {
+        alert("Resposta do captcha incorreta. Tente novamente.");
+        gerarCaptcha();
+        return;
+    }
+
     try {
         if (isRegistering) {
             const nome = document.getElementById("auth-nome").value.trim();
             if (!nome) { alert("O nome é obrigatório para cadastro."); return; }
+
             const userCred = await createUserWithEmailAndPassword(auth, email, senha);
+
+            // Enviar e-mail de verificação
+            await userCred.user.sendEmailVerification();
+
             // Salvar no Firestore
             await setDoc(doc(db, "users", userCred.user.uid), {
                 uid: userCred.user.uid,
                 nome: nome,
                 email: email,
                 role: "user",
+                emailVerified: false,
                 dataCadastro: new Date().toISOString()
             });
-            alert("Conta criada com sucesso!");
+
+            // Mostrar banner de verificação
+            if (authVerifyBanner) authVerifyBanner.classList.add("visible");
+            authTitle.innerText = "Login";
+            authSubmit.innerText = "Entrar";
+            nameGroup.style.display = "none";
+            isRegistering = false;
+            if (authSwitchLabel) authSwitchLabel.innerText = "Não tem conta?";
+            toggleAuth.innerText = "Cadastre-se";
+            if (authForgotWrap) authForgotWrap.style.display = "";
+
         } else {
-            await signInWithEmailAndPassword(auth, email, senha);
-            alert("Login realizado com sucesso!");
+            const userCred = await signInWithEmailAndPassword(auth, email, senha);
+
+            // Verificar se e-mail foi confirmado
+            if (!userCred.user.emailVerified) {
+                if (authVerifyBanner) authVerifyBanner.classList.add("visible");
+                await signOut(auth);
+                alert("Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.");
+                gerarCaptcha();
+                return;
+            }
+
+            showSection("perguntas");
         }
-        showSection("perguntas"); // Redireciona visualmente
+
         authForm.reset();
+        gerarCaptcha();
+
     } catch (error) {
         console.error(error);
-        alert("Erro na autenticação: " + error.message);
+        let msg = "Erro na autenticação.";
+        if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password" || error.code === "auth/invalid-credential") {
+            msg = "E-mail ou senha incorretos.";
+        } else if (error.code === "auth/email-already-in-use") {
+            msg = "Este e-mail já está cadastrado. Faça o login.";
+        } else if (error.code === "auth/invalid-email") {
+            msg = "E-mail inválido.";
+        } else if (error.code === "auth/too-many-requests") {
+            msg = "Muitas tentativas. Tente novamente em alguns minutos.";
+        } else {
+            msg = error.message;
+        }
+        alert(msg);
+        gerarCaptcha();
     }
 });
 

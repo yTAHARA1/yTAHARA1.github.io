@@ -763,6 +763,7 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* ---- Inputs exclusivos do auth-box ---- */
 .auth-box .input-group {
     margin-bottom: 1.4rem;
     text-align: left;
@@ -792,17 +793,18 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     font-weight: 500;
     transition: var(--transition);
     box-sizing: border-box;
+    outline: none !important;
 }
 
 .auth-box .input-group input::placeholder {
-    color: #ffffff;
-    opacity: 0.85;
+    color: rgba(255, 255, 255, 0.55);
     font-size: 0.95rem;
     font-weight: 400;
 }
 
 .auth-box .input-group input[type="password"]::placeholder {
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-size: 1rem;
 }
 
 .auth-box .input-group input:focus,
@@ -816,14 +818,15 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 
 /* Autofill styling override */
 .auth-box .input-group input:-webkit-autofill,
-.auth-box .input-group input:-webkit-autofill:hover, 
-.auth-box .input-group input:-webkit-autofill:focus, 
+.auth-box .input-group input:-webkit-autofill:hover,
+.auth-box .input-group input:-webkit-autofill:focus,
 .auth-box .input-group input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px #0c0d10 inset !important;
     -webkit-text-fill-color: #ffffff !important;
     border: 1.8px solid #00df76 !important;
 }
 
+/* ---- Botão Entrar / Criar Conta ---- */
 .auth-box .btn-primary.w-100 {
     width: 100%;
     display: block !important;
@@ -853,6 +856,108 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     transform: translateY(0);
 }
 
+/* ---- Captcha ---- */
+.auth-captcha {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #0c0d10;
+    border: 1.8px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 0.5rem;
+}
+
+.captcha-question {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #00df76;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.captcha-input {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    min-width: 0;
+}
+
+.captcha-input::placeholder {
+    color: rgba(255,255,255,0.3) !important;
+    letter-spacing: 0 !important;
+    font-size: 0.9rem !important;
+}
+
+/* ---- Link Esqueci minha senha ---- */
+.auth-forgot {
+    text-align: right;
+    margin-top: -0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.auth-forgot a {
+    font-size: 0.8rem;
+    color: #727885;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.auth-forgot a:hover {
+    color: #00df76;
+}
+
+/* ---- Banner de verificação de e-mail ---- */
+.auth-verify-banner {
+    display: none;
+    background-color: rgba(0, 223, 118, 0.08);
+    border: 1px solid rgba(0, 223, 118, 0.3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 1.2rem;
+    text-align: left;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.auth-verify-banner.visible {
+    display: flex;
+}
+
+.auth-verify-banner svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.auth-verify-banner p {
+    font-size: 0.85rem;
+    color: #b0bec5;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.auth-verify-banner p strong {
+    color: #00df76;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.auth-verify-banner p a {
+    color: #00df76;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* ---- Alternância Cadastrar / Login ---- */
 .auth-box .auth-switch {
     margin-top: 1.8rem;
     margin-bottom: 0;
@@ -876,6 +981,59 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 .auth-box .auth-switch a:hover {
     color: #00ff85;
     text-decoration: underline;
+}
+
+/* ========================================================= */
+/* FORMULÁRIOS GLOBAIS (Admin / Q&A) — estilo padrão do site */
+/* ========================================================= */
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-main);
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 14px 18px;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-bright);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+    background-color: var(--bg-dark);
+    box-shadow: 0 0 0 3px rgba(0, 255, 127, 0.1);
+}
+
+/* Corrige autofill amarelo no Chrome */
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus,
+.input-group input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--bg-dark) inset !important;
+    -webkit-text-fill-color: var(--text-bright) !important;
+    border: 1px solid var(--accent);
 }
 
 /* GRID Projetos */
