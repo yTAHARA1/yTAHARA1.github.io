@@ -130,6 +130,7 @@ navLogout.addEventListener("click", async (e) => {
 // ====== LÓGICA DE LOGIN/REGISTRO ======
 let isRegistering = false;
 const toggleAuth = document.getElementById("toggle-auth");
+const authSwitchLabel = document.getElementById("auth-switch-label");
 const nameGroup = document.getElementById("name-group");
 const authTitle = document.getElementById("auth-title");
 const authSubmit = document.getElementById("auth-submit");
@@ -142,12 +143,14 @@ toggleAuth.addEventListener("click", (e) => {
         authTitle.innerText = "Cadastre-se";
         authSubmit.innerText = "Criar Conta";
         nameGroup.style.display = "block";
-        toggleAuth.innerHTML = "Já tem conta? <span style='color: var(--accent)'>Faça o login</span>";
+        if (authSwitchLabel) authSwitchLabel.innerText = "Já tem conta?";
+        toggleAuth.innerText = "Faça o login";
     } else {
         authTitle.innerText = "Login";
         authSubmit.innerText = "Entrar";
         nameGroup.style.display = "none";
-        toggleAuth.innerHTML = "Não tem conta? <span style='color: var(--accent)'>Cadastre-se</span>";
+        if (authSwitchLabel) authSwitchLabel.innerText = "Não tem conta?";
+        toggleAuth.innerText = "Cadastre-se";
     }
 });
 
