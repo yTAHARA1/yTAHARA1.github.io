@@ -219,10 +219,14 @@
 
                     <!-- Banner de verificação de e-mail -->
                     <div class="auth-verify-banner" id="auth-verify-banner">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00df76" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00df76" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
                         <p>
                             <strong>Verifique seu e-mail</strong>
-                            Um link de confirmação foi enviado. Após verificar, 
+                            Um link de confirmação foi enviado. Após verificar,
                             <a href="#" id="auth-resend-verify">reenviar e-mail</a>.
                         </p>
                     </div>
@@ -234,11 +238,12 @@
                         </div>
                         <div class="input-group">
                             <label for="auth-email">E-mail</label>
-                            <input type="email" id="auth-email" required autocomplete="email" placeholder="fernandaferreira@email.com">
+                            <input type="email" id="auth-email" required autocomplete="email" placeholder="Email">
                         </div>
                         <div class="input-group">
                             <label for="auth-senha">Senha</label>
-                            <input type="password" id="auth-senha" minlength="8" required autocomplete="current-password" placeholder="••••••••">
+                            <input type="password" id="auth-senha" minlength="8" required
+                                autocomplete="current-password" placeholder="Senha">
                         </div>
 
                         <!-- Link Esqueci minha senha (só visível no modo Login) -->
@@ -251,7 +256,8 @@
                             <label>Verificação de Segurança</label>
                             <div class="auth-captcha">
                                 <span class="captcha-question" id="captcha-question">3 + 7 = ?</span>
-                                <input type="number" id="captcha-answer" class="captcha-input" placeholder="Resposta" autocomplete="off" required>
+                                <input type="number" id="captcha-answer" class="captcha-input" placeholder="Resposta"
+                                    autocomplete="off" required>
                             </div>
                         </div>
 
