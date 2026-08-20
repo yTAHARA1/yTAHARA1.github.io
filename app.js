@@ -6,6 +6,7 @@ import {
     questionStatusLabel,
     sanitizePublicUrl
 } from "./security-utils.js?v=1";
+import { siteAlert, siteConfirm } from "./ui-dialog.js?v=2";
 import { 
     createUserWithEmailAndPassword, 
     deleteUser,
@@ -33,7 +34,10 @@ import {
 // ====== UTILITÁRIOS GERAIS ======
 function showFirebaseError(error, fallback) {
     console.error(error);
-    alert(firebaseErrorMessage(error, fallback));
+    void siteAlert(firebaseErrorMessage(error, fallback), {
+        tone: "error",
+        title: "Falha na operação"
+    });
 }
 
 // ====== ESTADO GLOBAL ======
@@ -156,7 +160,10 @@ async function applyAuthState(user) {
         const userDoc = await getDoc(userRef);
 
         if (!userDoc.exists()) {
-            alert("Seu perfil não está ativo. Entre em contato com o administrador do site.");
+            await siteAlert("Seu perfil não está ativo. Entre em contato com o administrador do site.", {
+                tone: "warning",
+                title: "Perfil indisponível"
+            });
             await signOut(auth);
             return;
         }
@@ -203,7 +210,10 @@ onAuthStateChanged(auth, applyAuthState);
 navLogout.addEventListener("click", async (e) => {
     e.preventDefault();
     await signOut(auth);
-    alert("Você saiu da sua conta.");
+    await siteAlert("Você saiu da sua conta.", {
+        tone: "success",
+        title: "Sessão encerrada"
+    });
     window.location.href = "#home";
 });
 
@@ -281,12 +291,15 @@ if (authForgotLink) {
         e.preventDefault();
         const email = document.getElementById("auth-email").value.trim();
         if (!email) {
-            alert("Digite seu e-mail no campo acima primeiro.");
+            await siteAlert("Digite seu e-mail no campo acima primeiro.", { tone: "warning" });
             return;
         }
         try {
             await sendPasswordResetEmail(auth, email);
-            alert(`E-mail de redefinição de senha enviado para ${email}. Verifique sua caixa de entrada.`);
+            await siteAlert(`E-mail de redefinição de senha enviado para ${email}. Verifique sua caixa de entrada.`, {
+                tone: "success",
+                title: "E-mail enviado"
+            });
         } catch (error) {
             showFirebaseError(error, "Não foi possível enviar o e-mail de redefinição. Tente novamente.");
         }
@@ -300,12 +313,15 @@ if (authResendVerify) {
         if (auth.currentUser && !auth.currentUser.emailVerified) {
             try {
                 await sendEmailVerification(auth.currentUser);
-                alert("E-mail de verificação reenviado! Verifique sua caixa de entrada.");
+                await siteAlert("E-mail de verificação reenviado! Verifique sua caixa de entrada.", {
+                    tone: "success",
+                    title: "Verificação enviada"
+                });
             } catch (error) {
                 showFirebaseError(error, "Não foi possível reenviar a verificação. Tente novamente.");
             }
         } else {
-            alert("Entre novamente para solicitar outro e-mail de verificação.");
+            await siteAlert("Entre novamente para solicitar outro e-mail de verificação.", { tone: "warning" });
         }
     });
 }
@@ -318,18 +334,21 @@ authForm.addEventListener("submit", async (e) => {
 
     // Validação básica
     if (!email || !senha) {
-        alert("E-mail e senha são obrigatórios!");
+        await siteAlert("E-mail e senha são obrigatórios!", { tone: "warning" });
         return;
     }
     if (senha.length < 8) {
-        alert("Sua senha precisa ter pelo menos 8 caracteres.");
+        await siteAlert("Sua senha precisa ter pelo menos 8 caracteres.", { tone: "warning" });
         return;
     }
 
     // Validação do captcha
     const respostaCaptcha = parseInt(captchaAnswer ? captchaAnswer.value : "NaN", 10);
     if (isNaN(respostaCaptcha) || respostaCaptcha !== captchaExpected) {
-        alert("Resposta do captcha incorreta. Tente novamente.");
+        await siteAlert("Resposta do captcha incorreta. Tente novamente.", {
+            tone: "warning",
+            title: "Verificação incorreta"
+        });
         gerarCaptcha();
         return;
     }
@@ -337,7 +356,10 @@ authForm.addEventListener("submit", async (e) => {
     try {
         if (isRegistering) {
             const nome = document.getElementById("auth-nome").value.trim();
-            if (!nome) { alert("O nome é obrigatório para cadastro."); return; }
+            if (!nome) {
+                await siteAlert("O nome é obrigatório para cadastro.", { tone: "warning" });
+                return;
+            }
 
             registrationInProgress = true;
             let userCred;
@@ -387,7 +409,10 @@ authForm.addEventListener("submit", async (e) => {
             if (verificationEmailError) {
                 showFirebaseError(verificationEmailError, "A conta foi criada, mas o e-mail de confirmação não foi enviado. Use o link para reenviar.");
             } else {
-                alert("Conta criada! Enviamos um e-mail de confirmação em português.");
+                await siteAlert("Conta criada! Enviamos um e-mail de confirmação em português.", {
+                    tone: "success",
+                    title: "Conta criada"
+                });
             }
 
         } else {
@@ -396,7 +421,10 @@ authForm.addEventListener("submit", async (e) => {
             // Verificar se e-mail foi confirmado
             if (!userCred.user.emailVerified) {
                 if (authVerifyBanner) authVerifyBanner.classList.add("visible");
-                alert("Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.");
+                await siteAlert("Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.", {
+                    tone: "warning",
+                    title: "Confirmação necessária"
+                });
                 gerarCaptcha();
                 return;
             }
@@ -567,7 +595,10 @@ formPergunta.addEventListener("submit", async (e) => {
 
     const texto = document.getElementById("pergunta-texto").value.trim();
     if (!texto || texto.length > 1000) {
-        alert("Sua pergunta não pode estar vazia e o limite é de 1000 caracteres.");
+        await siteAlert("Sua pergunta não pode estar vazia e o limite é de 1000 caracteres.", {
+            tone: "warning",
+            title: "Revise sua pergunta"
+        });
         return;
     }
     
@@ -584,7 +615,10 @@ formPergunta.addEventListener("submit", async (e) => {
             dataHora: serverTimestamp(),
             status: "pendente"
         });
-        alert("Pergunta enviada com sucesso!");
+        await siteAlert("Pergunta enviada com sucesso!", {
+            tone: "success",
+            title: "Pergunta recebida"
+        });
         formPergunta.reset();
         carregarMinhasPerguntas();
     } catch (error) {
@@ -642,7 +676,10 @@ formProjeto.addEventListener("submit", async (e) => {
     const imagemURL = sanitizePublicUrl(imageInput);
 
     if ((linkInput && !link) || (imageInput && !imagemURL)) {
-        alert("Use apenas endereços seguros que comecem com https://.");
+        await siteAlert("Use apenas endereços seguros que comecem com https://.", {
+            tone: "warning",
+            title: "Endereço não permitido"
+        });
         return;
     }
 
@@ -655,14 +692,14 @@ formProjeto.addEventListener("submit", async (e) => {
                 titulo, tags, link, descricao, imagemURL,
                 dataAtualizacao: serverTimestamp()
             });
-            alert("Projeto atualizado com sucesso!");
+            await siteAlert("Projeto atualizado com sucesso!", { tone: "success" });
         } else {
             // Criando novo
             await addDoc(collection(db, "projetos"), {
                 titulo, tags, link, descricao, imagemURL,
                 dataCriacao: serverTimestamp()
             });
-            alert("Projeto salvo com sucesso!");
+            await siteAlert("Projeto salvo com sucesso!", { tone: "success" });
         }
 
         cancelarEdicao(); // limpa o form
@@ -750,7 +787,7 @@ async function mudarRole(uid, novoRole) {
     if (!['user', 'admin'].includes(novoRole) || uid === currentUser?.uid) return;
     try {
         await updateDoc(doc(db, "users", uid), { role: novoRole });
-        alert("Perfil de acesso atualizado!");
+        await siteAlert("Perfil de acesso atualizado!", { tone: "success" });
     } catch(e) {
         showFirebaseError(e, "Não foi possível atualizar o perfil de acesso.");
         carregarUsuarios();
@@ -758,23 +795,31 @@ async function mudarRole(uid, novoRole) {
 }
 
 async function enviarRedefinicaoSenha(emailUsuario) {
-    if(confirm(`Enviar um link oficial do Google para ${emailUsuario} redefinir sua senha?`)) {
-        try {
-            await sendPasswordResetEmail(auth, emailUsuario);
-            alert("Sucesso! O Firebase enviou um e-mail de redefinição de senha em português.");
-        } catch(e) {
-            showFirebaseError(e, "Não foi possível enviar o e-mail de redefinição.");
-        }
+    try {
+        await sendPasswordResetEmail(auth, emailUsuario);
+        await siteAlert("O Firebase enviou um e-mail de redefinição de senha em português.", {
+            tone: "success",
+            title: "E-mail enviado"
+        });
+    } catch(e) {
+        showFirebaseError(e, "Não foi possível enviar o e-mail de redefinição.");
     }
 }
 
 async function deletarUsuario(uid) {
     if (uid === currentUser?.uid) return;
-    if(confirm("Remover o perfil deste usuário? Ele perderá o acesso ao site, mas a conta de autenticação deverá ser excluída separadamente no Firebase Console.")) {
+    if (await siteConfirm("Remover o perfil deste usuário? Ele perderá o acesso ao site, mas a conta de autenticação deverá ser excluída separadamente no Firebase Console.", {
+        tone: "danger",
+        title: "Remover perfil",
+        confirmText: "Remover"
+    })) {
         try {
             await deleteDoc(doc(db, "users", uid));
             carregarUsuarios();
-            alert("Perfil removido. Se desejar, exclua também a conta na área Authentication do Firebase Console.");
+            await siteAlert("Perfil removido. Se desejar, exclua também a conta na área Authentication do Firebase Console.", {
+                tone: "success",
+                title: "Perfil removido"
+            });
         } catch(e) {
             showFirebaseError(e, "Não foi possível remover o perfil.");
         }
@@ -796,7 +841,7 @@ async function mudarStatusPergunta(pid, novoStatus) {
 async function responderPergunta(pid) {
     const textarea = document.getElementById("resp-" + pid);
     if (!textarea || !textarea.value.trim()) {
-        alert("Você precisa digitar uma resposta antes de publicar.");
+        await siteAlert("Você precisa digitar uma resposta antes de publicar.", { tone: "warning" });
         return;
     }
     
@@ -806,14 +851,18 @@ async function responderPergunta(pid) {
             resposta: textarea.value.trim()
         });
         carregarTodasPerguntas(); // Atualiza tab admin
-        alert("Resposta publicada com sucesso!");
+        await siteAlert("Resposta publicada com sucesso!", { tone: "success" });
     } catch(e) {
         showFirebaseError(e, "Não foi possível publicar a resposta.");
     }
 }
 
 async function deletarPergunta(pid) {
-    if(confirm("Tem certeza de que deseja excluir esta pergunta?")) {
+    if (await siteConfirm("Tem certeza de que deseja excluir esta pergunta?", {
+        tone: "danger",
+        title: "Excluir pergunta",
+        confirmText: "Excluir"
+    })) {
         try {
             await deleteDoc(doc(db, "perguntas", pid));
             carregarTodasPerguntas();
@@ -906,10 +955,14 @@ function cancelarEdicao() {
 }
 
 async function deletarProjeto(pid) {
-    if(confirm("Tem absoluta certeza de que deseja EXCLUIR este Case Study do site?")) {
+    if (await siteConfirm("Tem absoluta certeza de que deseja excluir este Case Study do site?", {
+        tone: "danger",
+        title: "Excluir Case Study",
+        confirmText: "Excluir"
+    })) {
         try {
             await deleteDoc(doc(db, "projetos", pid));
-            alert("Projeto excluído.");
+            await siteAlert("Projeto excluído.", { tone: "success" });
             carregarProjetosPublicos();
             carregarProjetosAdmin();
             cancelarEdicao(); // limpa edições se estiver editando este
@@ -946,7 +999,10 @@ if(formCertificado) {
         const imagemURL = sanitizePublicUrl(imageInput);
 
         if ((linkInput && !link) || !imagemURL) {
-            alert("Use apenas endereços seguros que comecem com https://.");
+            await siteAlert("Use apenas endereços seguros que comecem com https://.", {
+                tone: "warning",
+                title: "Endereço não permitido"
+            });
             return;
         }
 
@@ -958,13 +1014,13 @@ if(formCertificado) {
                     titulo, emissor, link, imagemURL,
                     dataAtualizacao: serverTimestamp()
                 });
-                alert("Certificado atualizado com sucesso!");
+                await siteAlert("Certificado atualizado com sucesso!", { tone: "success" });
             } else {
                 await addDoc(collection(db, "certificados"), {
                     titulo, emissor, link, imagemURL,
                     dataCriacao: serverTimestamp()
                 });
-                alert("Certificado salvo com sucesso!");
+                await siteAlert("Certificado salvo com sucesso!", { tone: "success" });
             }
 
             cancelarEdicaoCertificado();
@@ -1034,10 +1090,14 @@ function cancelarEdicaoCertificado() {
 }
 
 async function deletarCertificado(id) {
-    if(confirm("Tem absoluta certeza de que deseja EXCLUIR este Certificado do site?")) {
+    if (await siteConfirm("Tem absoluta certeza de que deseja excluir este Certificado do site?", {
+        tone: "danger",
+        title: "Excluir certificado",
+        confirmText: "Excluir"
+    })) {
         try {
             await deleteDoc(doc(db, "certificados", id));
-            alert("Certificado excluído.");
+            await siteAlert("Certificado excluído.", { tone: "success" });
             carregarCertificadosPublicos();
             carregarCertificadosAdmin();
             cancelarEdicaoCertificado();
