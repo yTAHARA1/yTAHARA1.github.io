@@ -7,18 +7,24 @@
 }
 
 :root {
-    --bg-primary: #08080a;
-    --bg-surface: #0f1013;
-    --bg-surface-hover: #15161c;
-    --text-primary: #f3f4f6;
-    --text-muted: #9ca3af;
-    --text-dim: #6b7280;
-    --accent-green: #00ff7f;
-    --accent-green-dim: rgba(0, 255, 127, 0.15);
-    --border: #1f2229;
-    --danger: #ff4757;
-    --warning: #ffa502;
-    --border-radius: 6px;
+    --bg-primary: #0a0a0c;         /* Fundo principal profundo */
+    --bg-surface: #111216;         /* Fundo de cards, painéis e janelas */
+    --bg-surface-hover: #16181f;   /* Fundo de cards em hover */
+    --accent-green: #00ff7f;       /* Verde neon vibrante */
+    --accent-green-dim: rgba(0, 255, 127, 0.1);  /* Glow suave */
+    --accent-green-medium: rgba(0, 255, 127, 0.2); /* Glow médio */
+    --accent-green-strong: rgba(0, 255, 127, 0.35); /* Glow forte */
+    --text-primary: #f3f4f6;       /* Texto principal brilhante */
+    --text-muted: #a0aec0;         /* Texto secundário (contraste AA garantido) */
+    --text-dim: #718096;           /* Texto auxiliar e desativado */
+    --border: #1f232d;             /* Bordas padrão */
+    --border-hover: #2d3342;       /* Bordas em hover */
+    --danger: #ff4757;             /* Mensagens de erro/perigo */
+    --danger-dim: rgba(255, 71, 87, 0.1);
+    --warning: #ffa502;            /* Mensagens de alerta/aviso */
+    --warning-dim: rgba(255, 165, 2, 0.1);
+    --success: #2ed573;            /* Mensagens de sucesso */
+    --border-radius: 8px;          /* Padronização de cantos */
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Mapeamento de compatibilidade */
@@ -29,7 +35,7 @@
     --text-bright: var(--text-primary);
     --accent: var(--accent-green);
     --accent-glow: var(--accent-green-dim);
-    --accent-glow-strong: rgba(0, 255, 127, 0.3);
+    --accent-glow-strong: var(--accent-green-strong);
     --border-color: var(--border);
 }
 * {
@@ -304,7 +310,7 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 
 .grid-especialidades {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 2rem;
 }
 
@@ -1039,7 +1045,7 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
 /* GRID Projetos */
 .grid-projetos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 2rem;
 }
 
@@ -1097,28 +1103,59 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     background-color: var(--bg-surface);
     border: 1px solid var(--border);
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 255, 127, 0.02);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     transition: var(--transition);
+    position: relative;
 }
 
 .window-pane:hover {
     border-color: var(--accent-green);
-    box-shadow: 0 0 15px var(--accent-green-dim), 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 18px var(--accent-green-dim);
 }
 
 .window-pane:focus-within {
     outline: none;
     border-color: var(--accent-green);
-    box-shadow: 0 0 20px var(--accent-green-dim), 0 4px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 22px var(--accent-green-medium);
+}
+
+/* Estados da Janela */
+.window-pane.minimized {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+.window-pane.minimized .window-body {
+    display: none !important;
+}
+
+.window-pane.maximized {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    z-index: 2000 !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px var(--accent-green-medium) !important;
+}
+
+.window-pane.maximized .window-body {
+    overflow-y: auto;
+    height: calc(100% - 45px);
 }
 
 .window-header {
-    background-color: #0b0c0e;
+    background-color: #0c0d10;
     border-bottom: 1px solid var(--border);
-    padding: 10px 16px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1136,6 +1173,18 @@ img[src]:not([src="placeholder-perfil.jpg"]):not([src="placeholder-jiujitsu.jpg"
     height: 12px;
     border-radius: 50%;
     display: inline-block;
+    cursor: pointer;
+    transition: filter 0.15s ease, transform 0.1s ease;
+    position: relative;
+}
+
+.control-dot:hover {
+    filter: brightness(1.2);
+    transform: scale(1.15);
+}
+
+.control-dot:active {
+    transform: scale(0.95);
 }
 
 .control-dot.close {
@@ -1237,8 +1286,8 @@ body::-webkit-scrollbar-thumb:hover {
 
 .btn-skip {
     background: none;
-    border: 1px dashed var(--border);
-    color: var(--text-dim);
+    border: 1px dashed var(--text-dim);
+    color: var(--text-muted);
     padding: 8px 16px;
     border-radius: 4px;
     font-family: 'JetBrains Mono', monospace;
@@ -1259,7 +1308,13 @@ button:not(.auth-box *):focus-visible,
 input:not(.auth-box *):focus-visible,
 textarea:focus-visible,
 select:focus-visible,
+<<<<<<< HEAD
+span:focus-visible,
+.control-dot:focus-visible,
+.window-pane:focus-within {
+=======
 .window-pane:not(.auth-box):focus-within {
+>>>>>>> 9e4d092188f673492f3710a7859ed9ceaa11e8dd
     outline: 2px solid var(--accent-green) !important;
     outline-offset: 4px !important;
 }
