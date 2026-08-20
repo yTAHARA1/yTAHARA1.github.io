@@ -7,19 +7,22 @@
     <title>Emilio Tahara | Infraestrutura e Automação</title>
     <meta name="description"
         content="Portfólio de Emilio Tahara - Infraestrutura, Automação Corporativa e Resiliência.">
+    <meta name="theme-color" content="#08080a">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
 </head>
 
 <body>
+    <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <header class="header reveal">
         <div class="container nav-content">
-            <div class="logo">ET<span class="accent">_</span></div>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu"
+            <a href="#home" class="logo" aria-label="Emilio Tahara — início">ET<span class="accent">_</span></a>
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu"
+                aria-controls="nav-links" aria-expanded="false"
                 style="font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; display: none;">☰</button>
-            <nav class="nav-links" id="nav-links">
+            <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
                 <a href="#sobre" class="nav-item">Sobre</a>
                 <a href="#especialidades" class="nav-item">Especialidades</a>
                 <a href="#certificados" class="nav-item">Certificados</a>
@@ -31,6 +34,7 @@
             </nav>
         </div>
     </header>
+    <main id="conteudo-principal">
     <section class="hero" id="home">
         <div class="container hero-content">
             <div class="hero-text reveal">
@@ -70,7 +74,8 @@
 
             <div class="hero-image-wrapper reveal delay-2">
                 <div class="image-placeholder portrait">
-                    <img src="fotominha_portifolio.jpeg" alt="Sua foto de perfil aqui" class="actual-image">
+                    <img src="fotominha_portifolio.jpeg" alt="Retrato de Emilio Tahara" class="actual-image"
+                        width="521" height="816" fetchpriority="high" decoding="async">
                 </div>
             </div>
         </div>
@@ -79,7 +84,8 @@
         <div class="container sobre-content">
             <div class="sobre-image-wrapper reveal">
                 <div class="image-placeholder portrait glow-border">
-                    <img src="fototahara_jiu.jpeg" alt="Sua foto atuando ou no tatame" class="actual-image">
+                    <img src="fototahara_jiu.jpeg" alt="Emilio Tahara praticando jiu-jitsu" class="actual-image"
+                        width="960" height="1280" loading="lazy" decoding="async">
                 </div>
             </div>
 
@@ -192,7 +198,7 @@
                 <!-- Projetos renderizados dinamicamente aqui -->
             </div>
 
-            <h2 class="section-title reveal" style="margin-top: 8rem;">Respondendo a <span
+            <h2 class="section-title reveal" id="qna-public-heading" style="margin-top: 8rem; display: none;">Respondendo a <span
                     class="accent">Comunidade</span></h2>
             <div id="qna-public-lista" class="grid-projetos" style="display: none;">
                 <!-- Perguntas e Respostas renderizadas aqui -->
@@ -427,6 +433,7 @@
             </div>
         </div>
     </section>
+    </main>
     <footer class="footer" id="contato">
         <div class="container footer-content reveal">
             <h2>Pronto para o <span class="accent">próximo desafio?</span></h2>
@@ -434,7 +441,7 @@
             <p class="highlight-text">vamos conversar.</p>
 
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/emilio-tahara-b5970b313/" class="social-btn" target="_blank"
+                <a href="https://www.linkedin.com/in/emilio-tahara-b5970b313/" class="social-btn" target="_blank" rel="noopener noreferrer"
                     aria-label="LinkedIn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -444,7 +451,7 @@
                     </svg>
                     LinkedIn
                 </a>
-                <a href="https://github.com/yTAHARA1/" class="social-btn" target="_blank" aria-label="GitHub">
+                <a href="https://github.com/yTAHARA1/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path
@@ -453,7 +460,7 @@
                     </svg>
                     GitHub
                 </a>
-                <a href="mailto: emilio.tahara01@gmail.com" class="social-btn" aria-label="Email">
+                <a href="mailto:emilio.tahara01@gmail.com" class="social-btn" aria-label="Email">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -461,7 +468,7 @@
                     </svg>
                     Email
                 </a>
-                <a href="https://www.instagram.com/tahara_tt/" class="social-btn" target="_blank"
+                <a href="https://www.instagram.com/tahara_tt/" class="social-btn" target="_blank" rel="noopener noreferrer"
                     aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -479,8 +486,8 @@
         </div>
     </footer>
 
-    <script src="script.js?v=4"></script>
-    <script type="module" src="app.js?v=4"></script>
+    <script src="script.js?v=5"></script>
+    <script type="module" src="app.js?v=5"></script>
 </body>
 
 </html>

@@ -62,18 +62,48 @@ const menuToggle = document.getElementById("menu-toggle");
 const navLinksContainer = document.getElementById("nav-links");
 
 if (menuToggle && navLinksContainer) {
+    const mobileMenu = window.matchMedia("(max-width: 960px)");
+
+    const setMenuState = (open) => {
+        navLinksContainer.classList.toggle("active", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+        menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+        menuToggle.textContent = open ? "×" : "☰";
+        document.body.classList.toggle("nav-open", open && mobileMenu.matches);
+    };
+
     menuToggle.addEventListener("click", () => {
-        navLinksContainer.classList.toggle("active");
+        setMenuState(!navLinksContainer.classList.contains("active"));
     });
+
     // Fechar menu ao clicar em um link mobile
     navLinksContainer.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", () => {
-            if(window.innerWidth <= 768) {
-                navLinksContainer.classList.remove("active");
-            }
+            if (mobileMenu.matches) setMenuState(false);
         });
     });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && navLinksContainer.classList.contains("active")) {
+            setMenuState(false);
+            menuToggle.focus();
+        }
+    });
+
+    document.addEventListener("click", (event) => {
+        if (mobileMenu.matches && navLinksContainer.classList.contains("active") &&
+            !event.target.closest(".nav-content")) {
+            setMenuState(false);
+        }
+    });
+
+    mobileMenu.addEventListener("change", () => setMenuState(false));
 }
+
+const siteHeader = document.querySelector(".header");
+const updateHeader = () => siteHeader?.classList.toggle("scrolled", window.scrollY > 12);
+window.addEventListener("scroll", updateHeader, { passive: true });
+updateHeader();
 
 // Navegação customizada para os itens dinâmicos
 navLogin.addEventListener("click", (e) => { e.preventDefault(); showSection('login'); });
@@ -353,7 +383,7 @@ async function carregarProjetosPublicos() {
                         </div>
                         <h3>${escapeHTML(p.titulo)}</h3>
                         <p style="margin-bottom:1rem;">${escapeHTML(p.descricao)}</p>
-                        ${p.link ? `<a href="${escapeHTML(p.link)}" target="_blank" class="btn-outline" style="display:inline-block">Ver Projeto</a>` : ''}
+                        ${p.link ? `<a href="${escapeHTML(p.link)}" target="_blank" rel="noopener noreferrer" class="btn-outline" style="display:inline-block">Ver Projeto</a>` : ''}
                     </div>
                 </div>
             `;
@@ -367,6 +397,7 @@ async function carregarProjetosPublicos() {
 // ====== RENDERIZAR Q&A PÚBLICO ======
 function carregarQnAPublico() {
     const lista = document.getElementById("qna-public-lista");
+    const heading = document.getElementById("qna-public-heading");
     if(!lista) return;
 
     const q = query(collection(db, "perguntas"));
@@ -401,8 +432,10 @@ function carregarQnAPublico() {
         if (count > 0) {
             lista.innerHTML = html;
             lista.style.display = "grid";
+            if (heading) heading.style.display = "block";
         } else {
             lista.style.display = "none";
+            if (heading) heading.style.display = "none";
         }
     }, (error) => {
         console.error("Erro ao carregar QnA em Tempo Real", error);
@@ -446,7 +479,7 @@ async function carregarCertificadosPublicos() {
                             <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-primary)">${escapeHTML(c.emissor)}</span>
                         </div>
                         <h3 style="margin-bottom: 1rem;">${escapeHTML(c.titulo)}</h3>
-                        ${c.link ? `<a href="${escapeHTML(c.link)}" target="_blank" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
+                        ${c.link ? `<a href="${escapeHTML(c.link)}" target="_blank" rel="noopener noreferrer" class="btn-outline" style="display:inline-block">Verificar Autenticidade</a>` : ''}
                     </div>
                 </div>
             `;
@@ -457,8 +490,6 @@ async function carregarCertificadosPublicos() {
     }
 }
 carregarCertificadosPublicos();
-window.carregarQnAPublico = carregarQnAPublico;
-carregarQnAPublico();
 
 // ====== LÓGICA DE PERGUNTAS (USUÁRIO) ======
 const formPergunta = document.getElementById("pergunta-form");
