@@ -8,6 +8,9 @@
     <meta name="description"
         content="Portfólio de Emilio Tahara - Infraestrutura, Automação Corporativa e Resiliência.">
     <meta name="theme-color" content="#08080a">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://www.google.com https://www.google-analytics.com https://www.googletagmanager.com wss://*.googleapis.com; frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; upgrade-insecure-requests">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -28,9 +31,9 @@
                 <a href="#certificados" class="nav-item">Certificados</a>
                 <a href="#projeto" class="nav-item">Case Studies</a>
                 <a href="#perguntas" id="nav-perguntas" class="nav-item" style="display: none;">Blog Q&A</a>
-                <a href="#admin" id="nav-admin" class="nav-item accent" style="display: none;">Admin</a>
-                <a href="#login" id="nav-login" class="btn-outline nav-item">Login</a>
-                <a href="#" id="nav-logout" class="btn-outline" style="display: none;">Logout</a>
+                <a href="#admin" id="nav-admin" class="nav-item accent" style="display: none;">Administração</a>
+                <a href="#login" id="nav-login" class="btn-outline nav-item">Entrar</a>
+                <a href="#" id="nav-logout" class="btn-outline" style="display: none;">Sair</a>
             </nav>
         </div>
     </header>
@@ -221,7 +224,7 @@
                     </div>
                 </div>
                 <div class="window-body">
-                    <h2 id="auth-title">Login</h2>
+                    <h2 id="auth-title">Acessar conta</h2>
 
                     <!-- Banner de verificação de e-mail -->
                     <div class="auth-verify-banner" id="auth-verify-banner">
@@ -232,8 +235,8 @@
                         </svg>
                         <p>
                             <strong>Verifique seu e-mail</strong>
-                            Um link de confirmação foi enviado. Após verificar,
-                            <a href="#" id="auth-resend-verify">reenviar e-mail</a>.
+                            Um link de confirmação foi enviado. Não recebeu?
+                            <a href="#" id="auth-resend-verify">Reenviar e-mail</a>.
                         </p>
                     </div>
 
@@ -244,7 +247,7 @@
                         </div>
                         <div class="input-group">
                             <label for="auth-email">E-mail</label>
-                            <input type="email" id="auth-email" required autocomplete="email" placeholder="Email">
+                            <input type="email" id="auth-email" required autocomplete="email" placeholder="E-mail">
                         </div>
                         <div class="input-group">
                             <label for="auth-senha">Senha</label>
@@ -312,7 +315,7 @@
     <!-- ======== PAINEL ADMINISTRATIVO ======== -->
     <section class="spa-section" id="admin" style="display: none;">
         <div class="container">
-            <h2 class="section-title">Painel <span class="accent">Admin</span></h2>
+            <h2 class="section-title">Painel <span class="accent">Administrativo</span></h2>
 
             <div class="admin-tabs">
                 <button class="btn-primary tab-btn active" data-tab="admin-projetos">Projetos</button>
@@ -346,7 +349,7 @@
                         <div style="display: flex; gap: 1rem;">
                             <button type="submit" class="btn-primary" id="proj-btn-submit">Salvar Projeto</button>
                             <button type="button" class="btn-secondary" id="proj-btn-cancelar" style="display: none;"
-                                onclick="window.cancelarEdicao()">Cancelar Edição</button>
+                                >Cancelar Edição</button>
                         </div>
                     </form>
 
@@ -381,7 +384,7 @@
                         <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                             <button type="submit" class="btn-primary" id="cert-btn-submit">Salvar Certificado</button>
                             <button type="button" class="btn-secondary" id="cert-btn-cancelar" style="display: none;"
-                                onclick="window.cancelarEdicaoCertificado()">Cancelar Edição</button>
+                                >Cancelar Edição</button>
                         </div>
                     </form>
 
@@ -407,7 +410,7 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>E-mail</th>
-                                    <th>Role</th>
+                                    <th>Perfil</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -487,7 +490,7 @@
     </footer>
 
     <script src="script.js?v=5"></script>
-    <script type="module" src="app.js?v=5"></script>
+    <script type="module" src="app.js?v=6"></script>
 </body>
 
 </html>

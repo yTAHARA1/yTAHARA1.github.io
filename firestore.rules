@@ -1,55 +1,166 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Função de checagem para saber se o requisitante tem role 'admin'
-    function isAdmin() {
-      return request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    function isSignedIn() {
+      return request.auth != null;
     }
-    
-    // Função para verificar se a conta existe e não foi desativada (usuário ainda consta na base)
-    function isRegisteredAndActive() {
-    	return request.auth != null &&
-        exists(/databases/$(database)/documents/users/$(request.auth.uid));
+
+    function hasActiveProfile() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function hasVerifiedEmail() {
+      return hasActiveProfile() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return hasActiveProfile()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function validText(value, minLength, maxLength) {
+      return value is string
+        && value.size() >= minLength
+        && value.size() <= maxLength;
+    }
+
+    function validSecureUrl(value, required) {
+      return value is string
+        && ((!required && value == '') || value.matches('^https://.+'))
+        && value.size() <= 2048;
+    }
+
+    function validLegacyDate(value) {
+      return value is timestamp
+        || (value is string && value.size() > 0 && value.size() <= 40);
+    }
+
+    function validProject(data) {
+      return data.keys().hasAll(['titulo', 'tags', 'link', 'descricao', 'imagemURL'])
+        && data.keys().hasOnly([
+          'titulo', 'tags', 'link', 'descricao', 'imagemURL',
+          'dataCriacao', 'dataAtualizacao'
+        ])
+        && validText(data.titulo, 1, 160)
+        && validText(data.tags, 1, 500)
+        && validText(data.descricao, 1, 5000)
+        && validSecureUrl(data.link, false)
+        && validSecureUrl(data.imagemURL, false)
+        && (!('dataCriacao' in data) || validLegacyDate(data.dataCriacao))
+        && (!('dataAtualizacao' in data) || validLegacyDate(data.dataAtualizacao));
+    }
+
+    function validCertificate(data) {
+      return data.keys().hasAll(['titulo', 'emissor', 'link', 'imagemURL'])
+        && data.keys().hasOnly([
+          'titulo', 'emissor', 'link', 'imagemURL',
+          'dataCriacao', 'dataAtualizacao'
+        ])
+        && validText(data.titulo, 1, 200)
+        && validText(data.emissor, 1, 200)
+        && validSecureUrl(data.link, false)
+        && validSecureUrl(data.imagemURL, true)
+        && (!('dataCriacao' in data) || validLegacyDate(data.dataCriacao))
+        && (!('dataAtualizacao' in data) || validLegacyDate(data.dataAtualizacao));
+    }
+
+    function validQuestion(data) {
+      return data.keys().hasAll(['uid', 'nome', 'texto', 'dataHora', 'status'])
+        && data.keys().hasOnly(['uid', 'nome', 'texto', 'dataHora', 'status', 'resposta'])
+        && validText(data.uid, 1, 128)
+        && validText(data.nome, 1, 120)
+        && validText(data.texto, 1, 1000)
+        && validLegacyDate(data.dataHora)
+        && data.status in ['pendente', 'respondida', 'arquivada']
+        && (!('resposta' in data) || validText(data.resposta, 1, 5000))
+        && (data.status != 'respondida' || ('resposta' in data));
     }
 
     match /users/{userId} {
-      // Criação de perfil restrita: OBRIGATÓRIO que a role seja 'user'
-      // Previne "Escalada de Privilégios" se um hacker tentar forçar role='admin'
-      allow create: if request.auth != null 
-                    && request.auth.uid == userId 
-                    && request.resource.data.role == "user";
-      // Usuário lê o próprio, Admin lê de todos
-      allow read: if request.auth.uid == userId || isAdmin();
-      // Apenas Admin pode atualizar (ex: mudar roles) e deletar
-      allow update, delete: if isAdmin();
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.auth.token.email is string
+        && request.resource.data.keys().hasAll([
+          'uid', 'nome', 'email', 'role', 'emailVerified', 'dataCadastro'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'uid', 'nome', 'email', 'role', 'emailVerified', 'dataCadastro'
+        ])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && validText(request.resource.data.nome, 1, 120)
+        && validText(request.resource.data.email, 3, 254)
+        && request.resource.data.role == 'user'
+        && request.resource.data.emailVerified == false
+        && request.resource.data.dataCadastro == request.time;
+
+      allow get: if (isSignedIn() && request.auth.uid == userId) || isAdmin();
+      allow list: if isAdmin();
+
+      allow update: if (
+          isSignedIn()
+          && request.auth.uid == userId
+          && request.auth.token.email_verified == true
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['emailVerified'])
+          && request.resource.data.emailVerified == true
+        ) || (
+          isAdmin()
+          && userId != request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role'])
+          && request.resource.data.role in ['user', 'admin']
+        );
+
+      allow delete: if isAdmin() && userId != request.auth.uid;
     }
 
-    match /projetos/{projetoId} {
-      // Qualquer pessoa (mesmo deslogada) pode ver os projetos (são as postagens no portfólio)
+    match /projetos/{projectId} {
       allow read: if true;
-      // Apenas Admin cria, atualiza ou deleta
-      allow create, update, delete: if isAdmin();
+      allow create: if isAdmin()
+        && validProject(request.resource.data)
+        && request.resource.data.dataCriacao == request.time;
+      allow update: if isAdmin()
+        && validProject(request.resource.data)
+        && request.resource.data.dataAtualizacao == request.time;
+      allow delete: if isAdmin();
     }
-    
-    match /certificados/{certificadoId} {
+
+    match /certificados/{certificateId} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow create: if isAdmin()
+        && validCertificate(request.resource.data)
+        && request.resource.data.dataCriacao == request.time;
+      allow update: if isAdmin()
+        && validCertificate(request.resource.data)
+        && request.resource.data.dataAtualizacao == request.time;
+      allow delete: if isAdmin();
     }
-    
-    match /perguntas/{perguntaId} {
-      // Validação Estrita (Backend): Verifica tipo, tamanho máximo (1000 chars) e força status pendente no envio
-      allow create: if isRegisteredAndActive()
-                    && request.resource.data.texto is string
-                    && request.resource.data.texto.size() > 0
-                    && request.resource.data.texto.size() <= 1000
-                    && request.resource.data.status == "pendente";
-      // Qualquer pessoa pode LER as perguntas na vitrine pública
-      allow read: if true;
-      allow update: if isAdmin();
-      // O autor pode deletar sua própria pergunta se ainda existir, e Admin pode deletar
-      allow delete: if (request.auth != null && request.auth.uid == resource.data.uid) || isAdmin();
+
+    match /perguntas/{questionId} {
+      allow create: if hasVerifiedEmail()
+        && validQuestion(request.resource.data)
+        && request.resource.data.keys().hasOnly(['uid', 'nome', 'texto', 'dataHora', 'status'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.nome == get(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        ).data.nome
+        && request.resource.data.status == 'pendente'
+        && request.resource.data.dataHora == request.time;
+
+      allow get: if resource.data.status == 'respondida'
+        || (hasVerifiedEmail() && resource.data.uid == request.auth.uid)
+        || isAdmin();
+
+      allow list: if resource.data.status == 'respondida'
+        || (hasVerifiedEmail() && resource.data.uid == request.auth.uid)
+        || isAdmin();
+
+      allow update: if isAdmin()
+        && validQuestion(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resposta']);
+
+      allow delete: if isAdmin()
+        || (hasActiveProfile() && resource.data.uid == request.auth.uid);
     }
   }
 }
