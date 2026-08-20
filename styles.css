@@ -1588,8 +1588,17 @@ footer {
     }
 
     .hero-content,
-    .sobre-content {
+    .sobre-content,
+    .projeto-content {
+        grid-template-columns: minmax(0, 1fr);
         gap: 2.5rem;
+    }
+
+    .hero-text,
+    .hero-image-wrapper,
+    .terminal-window {
+        width: 100%;
+        min-width: 0;
     }
 
     .hero-image-wrapper {
