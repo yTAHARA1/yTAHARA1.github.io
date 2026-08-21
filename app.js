@@ -229,36 +229,7 @@ const authForm          = document.getElementById("auth-form");
 const authForgotWrap    = document.getElementById("auth-forgot-wrap");
 const authForgotLink    = document.getElementById("auth-forgot-link");
 const authResendVerify  = document.getElementById("auth-resend-verify");
-const captchaQuestion   = document.getElementById("captcha-question");
-const captchaAnswer     = document.getElementById("captcha-answer");
 const authPassword      = document.getElementById("auth-senha");
-
-// ---- Captcha matemático ----
-let captchaExpected = 0;
-
-function gerarCaptcha() {
-    const ops = ['+', '-', '×'];
-    const op = ops[Math.floor(Math.random() * ops.length)];
-    let a, b, result;
-    if (op === '+') {
-        a = Math.floor(Math.random() * 10) + 1;
-        b = Math.floor(Math.random() * 10) + 1;
-        result = a + b;
-    } else if (op === '-') {
-        a = Math.floor(Math.random() * 10) + 5;
-        b = Math.floor(Math.random() * (a - 1)) + 1;
-        result = a - b;
-    } else {
-        a = Math.floor(Math.random() * 5) + 1;
-        b = Math.floor(Math.random() * 5) + 1;
-        result = a * b;
-    }
-    captchaExpected = result;
-    if (captchaQuestion) captchaQuestion.textContent = `${a} ${op} ${b} = ?`;
-    if (captchaAnswer) captchaAnswer.value = "";
-}
-
-gerarCaptcha(); // Gera captcha inicial
 
 // ---- Alternar Login / Cadastro ----
 toggleAuth.addEventListener("click", (e) => {
@@ -282,7 +253,6 @@ toggleAuth.addEventListener("click", (e) => {
         if (authForgotWrap) authForgotWrap.style.display = "";
         authPassword?.setAttribute("autocomplete", "current-password");
     }
-    gerarCaptcha();
 });
 
 // ---- Esqueci minha senha ----
@@ -339,17 +309,6 @@ authForm.addEventListener("submit", async (e) => {
     }
     if (senha.length < 8) {
         await siteAlert("Sua senha precisa ter pelo menos 8 caracteres.", { tone: "warning" });
-        return;
-    }
-
-    // Validação do captcha
-    const respostaCaptcha = parseInt(captchaAnswer ? captchaAnswer.value : "NaN", 10);
-    if (isNaN(respostaCaptcha) || respostaCaptcha !== captchaExpected) {
-        await siteAlert("Resposta do captcha incorreta. Tente novamente.", {
-            tone: "warning",
-            title: "Verificação incorreta"
-        });
-        gerarCaptcha();
         return;
     }
 
@@ -425,7 +384,6 @@ authForm.addEventListener("submit", async (e) => {
                     tone: "warning",
                     title: "Confirmação necessária"
                 });
-                gerarCaptcha();
                 return;
             }
 
@@ -433,12 +391,10 @@ authForm.addEventListener("submit", async (e) => {
         }
 
         authForm.reset();
-        gerarCaptcha();
 
     } catch (error) {
         registrationInProgress = false;
         showFirebaseError(error, "Não foi possível autenticar sua conta. Tente novamente.");
-        gerarCaptcha();
     }
 });
 
