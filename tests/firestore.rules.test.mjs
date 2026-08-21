@@ -197,6 +197,29 @@ test("administrador gerencia conteúdo sem poder rebaixar ou excluir a si mesmo"
         dataCriacao: serverTimestamp()
     }));
 
+    await assertSucceeds(updateDoc(doc(adminDb, "projetos/secure-project"), {
+        descricao: "Descrição segura e atualizada",
+        dataAtualizacao: serverTimestamp()
+    }));
+
+    await assertFails(updateDoc(doc(adminDb, "projetos/secure-project"), {
+        dataCriacao: serverTimestamp(),
+        dataAtualizacao: serverTimestamp()
+    }));
+
+    await assertSucceeds(setDoc(doc(adminDb, "certificados/secure-certificate"), {
+        titulo: "Certificado seguro",
+        emissor: "Instituição Teste",
+        link: "https://example.com/certificado",
+        imagemURL: "https://example.com/certificado.png",
+        dataCriacao: serverTimestamp()
+    }));
+
+    await assertFails(updateDoc(doc(adminDb, "certificados/secure-certificate"), {
+        dataCriacao: serverTimestamp(),
+        dataAtualizacao: serverTimestamp()
+    }));
+
     await assertFails(setDoc(doc(adminDb, "projetos/insecure-project"), {
         titulo: "Projeto inseguro",
         tags: "teste",
@@ -229,5 +252,32 @@ test("usuário comum não altera conteúdo administrativo", async () => {
     await assertFails(updateDoc(doc(db, "projetos/project-1"), {
         titulo: "Projeto adulterado",
         dataAtualizacao: serverTimestamp()
+    }));
+});
+
+test("administrador precisa manter o e-mail verificado", async () => {
+    await seedDocuments([
+        ["users/admin-1", userProfile("admin-1", "admin@example.com", "admin", "Administrador")]
+    ]);
+
+    const unverifiedAdminDb = authenticatedDb("admin-1", "admin@example.com", false);
+    await assertFails(setDoc(doc(unverifiedAdminDb, "projetos/blocked-project"), {
+        titulo: "Projeto bloqueado",
+        tags: "segurança",
+        link: "https://example.com/projeto",
+        descricao: "Não deve ser criado por uma sessão não verificada.",
+        imagemURL: "",
+        dataCriacao: serverTimestamp()
+    }));
+});
+
+test("coleções não declaradas permanecem bloqueadas", async () => {
+    await seedDocuments([
+        ["users/admin-1", userProfile("admin-1", "admin@example.com", "admin", "Administrador")]
+    ]);
+
+    const adminDb = authenticatedDb("admin-1", "admin@example.com", true);
+    await assertFails(setDoc(doc(adminDb, "configuracoes/private"), {
+        segredo: "não deve ser gravado"
     }));
 });

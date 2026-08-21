@@ -2,13 +2,30 @@
 
 Este projeto usa Firebase Authentication, Cloud Firestore e App Check. As alterações de segurança devem ser publicadas em etapas para evitar a interrupção do site.
 
+## Proteções presentes no código
+
+- App Check com reCAPTCHA Enterprise e renovação automática do token.
+- Token de depuração restrito a `localhost` e `127.0.0.1`.
+- Administração permitida somente para conta com perfil ativo, papel `admin` e e-mail verificado.
+- Datas originais de projetos e certificados não podem ser alteradas durante uma atualização.
+- Validação de campos, comprimentos e links HTTPS nas regras do Firestore.
+- Acesso negado por padrão para coleções não declaradas.
+
 ## Ordem segura de publicação
 
 1. Publique primeiro os arquivos do site (`index.html`, `app.js`, `firebase-config.js` e `security-utils.js`).
 2. Teste cadastro, verificação de e-mail, entrada, envio de pergunta e painel administrativo.
 3. Somente depois publique `firestore.rules` no Firebase Console.
 4. Mantenha o App Check sem imposição por 24 a 48 horas e acompanhe as métricas.
-5. Quando as solicitações válidas estiverem reconhecidas, ative a imposição primeiro no Cloud Firestore e, depois, no Authentication.
+5. Quando a grande maioria das solicitações legítimas estiver na categoria verificada, ative a imposição primeiro no Cloud Firestore.
+6. Teste novamente cadastro, entrada, conteúdo público e painel administrativo antes de considerar a imposição no Authentication.
+
+## Configuração recomendada do App Check
+
+- TTL: 1 hora.
+- Limite de risco do app: 0,5.
+- Renovação automática: ativada no código.
+- Imposição: manter desativada até a conclusão do período de monitoramento.
 
 ## Testes locais
 

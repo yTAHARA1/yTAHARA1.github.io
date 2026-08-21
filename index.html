@@ -10,6 +10,7 @@
     <meta name="author" content="Emilio Tahara">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#08080a">
+    <meta name="color-scheme" content="dark">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="canonical" href="https://ytahara1.github.io/">
 
@@ -21,11 +22,13 @@
     <meta property="og:description"
         content="Portfólio de Emilio Tahara sobre infraestrutura, automação, segurança, hardware e desenvolvimento em Python.">
     <meta property="og:image" content="https://ytahara1.github.io/social-preview.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="2172">
     <meta property="og:image:height" content="724">
     <meta property="og:image:alt" content="Identidade visual de Emilio Tahara — Infraestrutura e Automação">
 
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://ytahara1.github.io/">
     <meta name="twitter:title" content="Emilio Tahara | Infraestrutura e Automação">
     <meta name="twitter:description"
         content="Portfólio de Emilio Tahara sobre infraestrutura, automação, segurança, hardware e desenvolvimento em Python.">
@@ -36,27 +39,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=11">
+    <link rel="stylesheet" href="styles.css?v=12">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Emilio Tahara",
+            "@type": "ProfilePage",
+            "@id": "https://ytahara1.github.io/#perfil",
             "url": "https://ytahara1.github.io/",
-            "image": "https://ytahara1.github.io/fotominha_portifolio.jpeg",
-            "jobTitle": "Estudante técnico e profissional de infraestrutura e automação",
-            "sameAs": [
-                "https://www.linkedin.com/in/emilio-tahara-b5970b313/",
-                "https://github.com/yTAHARA1/",
-                "https://www.instagram.com/tahara_tt/"
-            ],
-            "knowsAbout": [
-                "Infraestrutura de TI",
-                "Automação",
-                "Segurança da Informação",
-                "Hardware",
-                "Python"
-            ]
+            "name": "Emilio Tahara | Infraestrutura e Automação",
+            "dateModified": "2026-08-20",
+            "mainEntity": {
+                "@type": "Person",
+                "@id": "https://ytahara1.github.io/#emilio-tahara",
+                "name": "Emilio Tahara",
+                "alternateName": "yTAHARA1",
+                "url": "https://ytahara1.github.io/",
+                "image": "https://ytahara1.github.io/fotominha_portifolio.jpeg",
+                "description": "Estudante técnico e profissional de infraestrutura, automação, hardware e desenvolvimento.",
+                "jobTitle": "Estagiário em Suporte de TI e Infraestrutura",
+                "sameAs": [
+                    "https://www.linkedin.com/in/emilio-tahara-b5970b313/",
+                    "https://github.com/yTAHARA1/",
+                    "https://www.instagram.com/tahara_tt/"
+                ],
+                "knowsAbout": [
+                    "Infraestrutura de TI",
+                    "Automação",
+                    "Segurança da Informação",
+                    "Hardware",
+                    "Python"
+                ]
+            }
         }
     </script>
 </head>
@@ -130,8 +143,13 @@
 
             <div class="hero-image-wrapper reveal delay-2">
                 <div class="image-placeholder portrait">
-                    <img src="fotominha_portifolio.jpeg" alt="Retrato de Emilio Tahara" class="actual-image"
-                        width="521" height="816" fetchpriority="high" decoding="async">
+                    <picture>
+                        <source type="image/webp"
+                            srcset="fotominha_portifolio-320.webp 320w, fotominha_portifolio-521.webp 521w"
+                            sizes="(max-width: 768px) 230px, 360px">
+                        <img src="fotominha_portifolio.jpeg" alt="Retrato de Emilio Tahara" class="actual-image"
+                            width="521" height="816" fetchpriority="high" decoding="async">
+                    </picture>
                 </div>
             </div>
         </div>
@@ -140,8 +158,13 @@
         <div class="container sobre-content">
             <div class="sobre-image-wrapper reveal">
                 <div class="image-placeholder portrait glow-border">
-                    <img src="fototahara_jiu.jpeg" alt="Emilio Tahara praticando jiu-jitsu" class="actual-image"
-                        width="960" height="1280" loading="lazy" decoding="async">
+                    <picture>
+                        <source type="image/webp"
+                            srcset="fototahara_jiu-480.webp 480w, fototahara_jiu-960.webp 960w"
+                            sizes="(max-width: 768px) 280px, 400px">
+                        <img src="fototahara_jiu.jpeg" alt="Emilio Tahara praticando jiu-jitsu" class="actual-image"
+                            width="960" height="1280" loading="lazy" decoding="async">
+                    </picture>
                 </div>
             </div>
 
@@ -543,7 +566,7 @@
     </footer>
 
     <script src="script.js?v=5"></script>
-    <script type="module" src="app.js?v=8"></script>
+    <script type="module" src="app.js?v=9"></script>
 </body>
 
 </html>

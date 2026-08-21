@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app-check.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
@@ -33,12 +32,24 @@ const auth = getAuth(app);
 auth.languageCode = "pt-BR";
 const db = getFirestore(app);
 
-// Só inicializa o Analytics se estiver num ambiente seguro onde a janela não bloqueia cookies agressivamente
+// Carrega o Analytics somente quando o navegador estiver ocioso, sem disputar
+// recursos com o conteúdo principal durante a abertura da página.
 let analytics = null;
-try {
-    analytics = getAnalytics(app);
-} catch (e) {
-    console.warn("Firebase Analytics bloqueado (ex: extensões de privacidade).", e);
+async function initializeAnalyticsWhenIdle() {
+    try {
+        const { getAnalytics, isSupported } = await import(
+            "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js"
+        );
+        if (await isSupported()) analytics = getAnalytics(app);
+    } catch (error) {
+        console.warn("Firebase Analytics bloqueado pelas configurações de privacidade.", error);
+    }
+}
+
+if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(() => void initializeAnalyticsWhenIdle(), { timeout: 3000 });
+} else {
+    window.setTimeout(() => void initializeAnalyticsWhenIdle(), 1200);
 }
 
 // Exportamos tudo para uso no app.js principal

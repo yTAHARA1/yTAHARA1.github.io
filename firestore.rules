@@ -15,7 +15,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return hasActiveProfile()
+      return hasVerifiedEmail()
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
@@ -121,6 +121,7 @@ service cloud.firestore {
         && request.resource.data.dataCriacao == request.time;
       allow update: if isAdmin()
         && validProject(request.resource.data)
+        && request.resource.data.dataCriacao == resource.data.dataCriacao
         && request.resource.data.dataAtualizacao == request.time;
       allow delete: if isAdmin();
     }
@@ -132,6 +133,7 @@ service cloud.firestore {
         && request.resource.data.dataCriacao == request.time;
       allow update: if isAdmin()
         && validCertificate(request.resource.data)
+        && request.resource.data.dataCriacao == resource.data.dataCriacao
         && request.resource.data.dataAtualizacao == request.time;
       allow delete: if isAdmin();
     }

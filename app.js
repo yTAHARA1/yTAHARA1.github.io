@@ -1,4 +1,4 @@
-import { auth, db } from "./firebase-config.js?v=6";
+import { auth, db } from "./firebase-config.js?v=7";
 import {
     escapeHTML,
     firebaseErrorMessage,
@@ -473,7 +473,7 @@ async function carregarProjetosPublicos() {
                         <span class="window-title">case_study_${escapeHTML(id.substring(0, 6))}.json</span>
                     </div>
                     <div class="window-body">
-                        ${imageUrl ? `<img src="${escapeHTML(imageUrl)}" alt="${escapeHTML(p.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                        ${imageUrl ? `<img src="${escapeHTML(imageUrl)}" alt="${escapeHTML(p.titulo)}" loading="lazy" decoding="async" fetchpriority="low" referrerpolicy="no-referrer" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
                         <div class="tech-stack" style="margin-bottom:1rem;">
                             ${p.tags ? escapeHTML(p.tags).split(',').map(t => `<span class="badge">${t.trim()}</span>`).join('') : ''}
                         </div>
@@ -570,7 +570,7 @@ async function carregarCertificadosPublicos() {
                         <span class="window-title">certificate_${escapeHTML(doc.id.substring(0, 6))}.crt</span>
                     </div>
                     <div class="window-body">
-                        ${imageUrl ? `<img src="${escapeHTML(imageUrl)}" alt="${escapeHTML(c.titulo)}" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
+                        ${imageUrl ? `<img src="${escapeHTML(imageUrl)}" alt="${escapeHTML(c.titulo)}" loading="lazy" decoding="async" fetchpriority="low" referrerpolicy="no-referrer" style="width:100%; border-radius: 8px; margin-bottom:1rem; aspect-ratio: 16/9; object-fit: cover;">` : ''}
                         <div class="tech-stack" style="margin-bottom:1rem;">
                             <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--text-primary)">${escapeHTML(c.emissor)}</span>
                         </div>
