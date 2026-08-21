@@ -18,6 +18,7 @@ import {
     serverTimestamp,
     setDoc,
     updateDoc,
+    writeBatch,
     where
 } from "firebase/firestore";
 
@@ -253,6 +254,26 @@ test("usuário comum não altera conteúdo administrativo", async () => {
         titulo: "Projeto adulterado",
         dataAtualizacao: serverTimestamp()
     }));
+});
+
+test("administrador exclui perfil e perguntas vinculadas em uma única operação", async () => {
+    await seedDocuments([
+        ["users/admin-1", userProfile("admin-1", "admin@example.com", "admin", "Administrador")],
+        ["users/user-1", userProfile("user-1", "user@example.com")],
+        ["perguntas/user-question", question("user-1", "pendente")]
+    ]);
+
+    const adminDb = authenticatedDb("admin-1", "admin@example.com", true);
+    const batch = writeBatch(adminDb);
+    batch.delete(doc(adminDb, "perguntas/user-question"));
+    batch.delete(doc(adminDb, "users/user-1"));
+
+    await assertSucceeds(batch.commit());
+
+    const removedUser = await assertSucceeds(getDoc(doc(adminDb, "users/user-1")));
+    const removedQuestion = await assertSucceeds(getDoc(doc(adminDb, "perguntas/user-question")));
+    assert.equal(removedUser.exists(), false);
+    assert.equal(removedQuestion.exists(), false);
 });
 
 test("administrador precisa manter o e-mail verificado", async () => {

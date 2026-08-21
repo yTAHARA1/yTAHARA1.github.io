@@ -30,6 +30,7 @@ import {
     query, 
     onSnapshot,
     serverTimestamp,
+    writeBatch,
     where
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
@@ -730,7 +731,7 @@ async function carregarUsuarios() {
                     </td>
                     <td>
                         <button class="action-btn" data-action="send-password-link" data-email="${escapeHTML(u.email)}" aria-label="Enviar link de redefinição de senha para ${escapeHTML(u.email)}" title="O Firebase enviará um link seguro por e-mail" style="color:var(--text-bright); border:1px solid var(--border-color); padding:4px 8px; border-radius:4px;">Enviar link de senha</button>
-                        <button class="action-btn delete" data-action="delete-user" data-uid="${escapeHTML(id)}" ${isCurrentUser ? 'disabled title="Você não pode remover o próprio perfil"' : ''}>Remover perfil</button>
+                        <button class="action-btn delete" data-action="delete-user" data-uid="${escapeHTML(id)}" ${isCurrentUser ? 'disabled title="Você não pode excluir o próprio usuário"' : 'title="Exclui o perfil e as perguntas do banco do site"'}>Excluir usuário e dados</button>
                     </td>
                 </tr>
             `;
@@ -814,22 +815,45 @@ async function enviarLinkRedefinicaoSenha(emailUsuario, button) {
     }
 }
 
-async function deletarUsuario(uid) {
-    if (uid === currentUser?.uid) return;
-    if (await siteConfirm("Remover o perfil deste usuário? Ele perderá o acesso ao site, mas a conta de autenticação deverá ser excluída separadamente no Firebase Console.", {
+async function deletarUsuario(uid, button) {
+    if (uid === currentUser?.uid || button?.disabled) return;
+    if (await siteConfirm("Excluir permanentemente o perfil e todas as perguntas deste usuário do banco do site? O acesso será bloqueado imediatamente. A conta técnica de login continuará no Firebase Authentication até ser excluída pelo Console.", {
         tone: "danger",
-        title: "Remover perfil",
-        confirmText: "Remover"
+        title: "Excluir usuário e dados",
+        confirmText: "Excluir definitivamente"
     })) {
+        const originalText = button?.textContent || "Excluir usuário e dados";
+        if (button) {
+            button.disabled = true;
+            button.textContent = "Excluindo...";
+        }
+
         try {
-            await deleteDoc(doc(db, "users", uid));
-            carregarUsuarios();
-            await siteAlert("Perfil removido. Se desejar, exclua também a conta na área Authentication do Firebase Console.", {
+            const perguntasSnapshot = await getDocs(
+                query(collection(db, "perguntas"), where("uid", "==", uid))
+            );
+
+            if (perguntasSnapshot.size > 499) {
+                throw new Error("O usuário possui registros demais para uma exclusão segura em uma única operação.");
+            }
+
+            const batch = writeBatch(db);
+            perguntasSnapshot.forEach((questionDoc) => batch.delete(questionDoc.ref));
+            batch.delete(doc(db, "users", uid));
+            await batch.commit();
+
+            await Promise.all([carregarUsuarios(), carregarTodasPerguntas()]);
+            await siteAlert(`O perfil e ${perguntasSnapshot.size} pergunta(s) vinculada(s) foram removidos do banco do site. O acesso foi bloqueado.`, {
                 tone: "success",
-                title: "Perfil removido"
+                title: "Usuário removido do banco"
             });
         } catch(e) {
-            showFirebaseError(e, "Não foi possível remover o perfil.");
+            showFirebaseError(e, "Não foi possível excluir o usuário e os dados vinculados.");
+        } finally {
+            if (button?.isConnected) {
+                button.disabled = false;
+                button.textContent = originalText;
+            }
         }
     }
 }
@@ -889,7 +913,7 @@ document.getElementById("tabela-usuarios")?.addEventListener("click", (event) =>
     const button = event.target.closest("button[data-action]");
     if (!button) return;
     if (button.dataset.action === "send-password-link") enviarLinkRedefinicaoSenha(button.dataset.email, button);
-    if (button.dataset.action === "delete-user") deletarUsuario(button.dataset.uid);
+    if (button.dataset.action === "delete-user") deletarUsuario(button.dataset.uid, button);
 });
 
 document.getElementById("lista-todas-perguntas")?.addEventListener("change", (event) => {
