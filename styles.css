@@ -1183,6 +1183,11 @@ main > section:not(.hero),
     font-weight: 600;
 }
 
+.action-btn:disabled {
+    cursor: wait;
+    opacity: 0.58;
+}
+
 .action-btn.delete {
     color: #ff4757;
 }

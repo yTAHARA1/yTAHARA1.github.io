@@ -729,7 +729,7 @@ async function carregarUsuarios() {
                         </select>
                     </td>
                     <td>
-                        <button class="action-btn" data-action="reset-password" data-email="${escapeHTML(u.email)}" style="color:var(--text-bright); border:1px solid var(--border-color); padding:4px 8px; border-radius:4px;">Redefinir senha</button>
+                        <button class="action-btn" data-action="send-password-link" data-email="${escapeHTML(u.email)}" aria-label="Enviar link de redefinição de senha para ${escapeHTML(u.email)}" title="O Firebase enviará um link seguro por e-mail" style="color:var(--text-bright); border:1px solid var(--border-color); padding:4px 8px; border-radius:4px;">Enviar link de senha</button>
                         <button class="action-btn delete" data-action="delete-user" data-uid="${escapeHTML(id)}" ${isCurrentUser ? 'disabled title="Você não pode remover o próprio perfil"' : ''}>Remover perfil</button>
                     </td>
                 </tr>
@@ -789,15 +789,28 @@ async function mudarRole(uid, novoRole) {
     }
 }
 
-async function enviarRedefinicaoSenha(emailUsuario) {
+async function enviarLinkRedefinicaoSenha(emailUsuario, button) {
+    if (!emailUsuario || button?.disabled) return;
+
+    const originalText = button?.textContent || "Enviar link de senha";
+    if (button) {
+        button.disabled = true;
+        button.textContent = "Enviando...";
+    }
+
     try {
         await sendPasswordResetEmail(auth, emailUsuario);
-        await siteAlert("O Firebase enviou um e-mail de redefinição de senha em português.", {
+        await siteAlert(`O Firebase enviou um link seguro para ${emailUsuario}. O administrador não visualiza nem altera a senha.`, {
             tone: "success",
-            title: "E-mail enviado"
+            title: "Link de senha enviado"
         });
     } catch(e) {
-        showFirebaseError(e, "Não foi possível enviar o e-mail de redefinição.");
+        showFirebaseError(e, "Não foi possível enviar o link de redefinição de senha.");
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.textContent = originalText;
+        }
     }
 }
 
@@ -875,7 +888,7 @@ document.getElementById("tabela-usuarios")?.addEventListener("change", (event) =
 document.getElementById("tabela-usuarios")?.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-action]");
     if (!button) return;
-    if (button.dataset.action === "reset-password") enviarRedefinicaoSenha(button.dataset.email);
+    if (button.dataset.action === "send-password-link") enviarLinkRedefinicaoSenha(button.dataset.email, button);
     if (button.dataset.action === "delete-user") deletarUsuario(button.dataset.uid);
 });
 
