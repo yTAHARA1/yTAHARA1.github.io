@@ -7,32 +7,42 @@
     <title>Emilio Tahara | Infraestrutura e Automação</title>
     <meta name="description"
         content="Portfólio de Emilio Tahara - Infraestrutura, Automação Corporativa e Resiliência.">
+<<<<<<< HEAD
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="referrer" content="strict-origin-when-cross-origin">
+=======
+    <meta name="theme-color" content="#08080a">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://www.google.com https://www.google-analytics.com https://www.googletagmanager.com wss://*.googleapis.com; frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:; upgrade-insecure-requests">
+>>>>>>> 9e4d092188f673492f3710a7859ed9ceaa11e8dd
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=8">
 </head>
 
 <body>
+    <a class="skip-link" href="#conteudo-principal">Ir para o conteúdo</a>
     <header class="header reveal">
         <div class="container nav-content">
-            <div class="logo">ET<span class="accent">_</span></div>
-            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu"
+            <a href="#home" class="logo" aria-label="Emilio Tahara — início">ET<span class="accent">_</span></a>
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menu"
+                aria-controls="nav-links" aria-expanded="false"
                 style="font-size: 1.8rem; color: white; background: none; border: none; cursor: pointer; display: none;">☰</button>
-            <nav class="nav-links" id="nav-links">
+            <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
                 <a href="#sobre" class="nav-item">Sobre</a>
                 <a href="#especialidades" class="nav-item">Especialidades</a>
                 <a href="#certificados" class="nav-item">Certificados</a>
                 <a href="#projeto" class="nav-item">Case Studies</a>
                 <a href="#perguntas" id="nav-perguntas" class="nav-item" style="display: none;">Blog Q&A</a>
-                <a href="#admin" id="nav-admin" class="nav-item accent" style="display: none;">Admin</a>
-                <a href="#login" id="nav-login" class="btn-outline nav-item">Login</a>
-                <a href="#" id="nav-logout" class="btn-outline" style="display: none;">Logout</a>
+                <a href="#admin" id="nav-admin" class="nav-item accent" style="display: none;">Administração</a>
+                <a href="#login" id="nav-login" class="btn-outline nav-item">Entrar</a>
+                <a href="#" id="nav-logout" class="btn-outline" style="display: none;">Sair</a>
             </nav>
         </div>
     </header>
+    <main id="conteudo-principal">
     <section class="hero" id="home">
         <div class="container hero-content">
             <div class="hero-text reveal">
@@ -46,19 +56,25 @@
                         <span class="window-title">bash - emilio@tahara.dev</span>
                     </div>
                     <div class="window-body terminal-body">
-                        <div class="terminal-logs" style="font-size: 0.8rem; margin-bottom: 1.5rem; border-bottom: 1px dashed var(--border); padding-bottom: 1rem; line-height: 1.4; font-family: 'JetBrains Mono', monospace;">
+                        <div class="terminal-logs"
+                            style="font-size: 0.8rem; margin-bottom: 1.5rem; border-bottom: 1px dashed var(--border); padding-bottom: 1rem; line-height: 1.4; font-family: 'JetBrains Mono', monospace;">
                             <span class="text-muted">[etahara_kernel v2.6.7 init]</span><br>
                             <span style="color: var(--danger)">[ERR] Connection refused to legacy_ad.sys</span><br>
-                            <span style="color: var(--warning)">[WARN] Deprecated dependency in data_sync module</span><br>
-                            <span style="color: var(--accent-green)">[OK] Security posture validated. Level: Maximum</span>
+                            <span style="color: var(--warning)">[WARN] Deprecated dependency in data_sync
+                                module</span><br>
+                            <span style="color: var(--accent-green)">[OK] Security posture validated. Level:
+                                Maximum</span>
                         </div>
                         <p class="overline"><span class="accent">></span> Olá, mundo.</p>
-                        <h1 id="hero-title">A disciplina do tatame aplicada à vanguarda da <span class="accent">Infraestrutura</span> e <span class="accent">Automação.</span></h1>
-                        <p class="subtitle" id="hero-subtitle">Eu sou Emilio Tahara. Aos 16 anos, atuo na infraestrutura interna da Solinftec, unindo hardware, compliance e dados.</p>
+                        <h1 id="hero-title">A disciplina do tatame aplicada à vanguarda da <span
+                                class="accent">Infraestrutura</span> e <span class="accent">Automação.</span></h1>
+                        <p class="subtitle" id="hero-subtitle">Eu sou Emilio Tahara. Aos 16 anos, atuo na infraestrutura
+                            interna da Solinftec, unindo hardware, compliance e dados.</p>
                         <div class="hero-actions">
                             <a href="#projeto" class="btn-primary">Ver Case Studies</a>
                             <a href="#sobre" class="btn-secondary">Conhecer Meu Perfil</a>
-                            <button id="btn-skip-typing" class="btn-skip" aria-label="Pular efeito de digitação" style="display: none;">Pular [Esc]</button>
+                            <button id="btn-skip-typing" class="btn-skip" aria-label="Pular efeito de digitação"
+                                style="display: none;">Pular [Esc]</button>
                         </div>
                     </div>
                 </div>
@@ -66,7 +82,8 @@
 
             <div class="hero-image-wrapper reveal delay-2">
                 <div class="image-placeholder portrait">
-                    <img src="fotominha_portifolio.jpeg" alt="Sua foto de perfil aqui" class="actual-image">
+                    <img src="fotominha_portifolio.jpeg" alt="Retrato de Emilio Tahara" class="actual-image"
+                        width="521" height="816" fetchpriority="high" decoding="async">
                 </div>
             </div>
         </div>
@@ -75,7 +92,8 @@
         <div class="container sobre-content">
             <div class="sobre-image-wrapper reveal">
                 <div class="image-placeholder portrait glow-border">
-                    <img src="fototahara_jiu.jpeg" alt="Sua foto atuando ou no tatame" class="actual-image">
+                    <img src="fototahara_jiu.jpeg" alt="Emilio Tahara praticando jiu-jitsu" class="actual-image"
+                        width="960" height="1280" loading="lazy" decoding="async">
                 </div>
             </div>
 
@@ -108,8 +126,9 @@
                     </div>
                     <div class="window-body">
                         <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
                                 <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
                                 <line x1="6" y1="6" x2="6.01" y2="6"></line>
@@ -132,13 +151,15 @@
                     </div>
                     <div class="window-body">
                         <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             </svg>
                         </div>
                         <h3>Compliance & Segurança</h3>
-                        <p>Gestão rigorosa de softwares corporativos, garantindo aderência a políticas de segurança interna
+                        <p>Gestão rigorosa de softwares corporativos, garantindo aderência a políticas de segurança
+                            interna
                             e proteção de dados sensíveis.</p>
                     </div>
                 </div>
@@ -153,14 +174,16 @@
                     </div>
                     <div class="window-body">
                         <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <polyline points="4 17 10 11 4 5"></polyline>
                                 <line x1="12" y1="19" x2="20" y2="19"></line>
                             </svg>
                         </div>
                         <h3>Automação & Scripting</h3>
-                        <p>Desenvolvimento em Python focado em performance, eliminação de gargalos repetitivos e integração
+                        <p>Desenvolvimento em Python focado em performance, eliminação de gargalos repetitivos e
+                            integração
                             entre plataformas de dados.</p>
                     </div>
                 </div>
@@ -183,7 +206,7 @@
                 <!-- Projetos renderizados dinamicamente aqui -->
             </div>
 
-            <h2 class="section-title reveal" style="margin-top: 8rem;">Respondendo a <span
+            <h2 class="section-title reveal" id="qna-public-heading" style="margin-top: 8rem; display: none;">Respondendo a <span
                     class="accent">Comunidade</span></h2>
             <div id="qna-public-lista" class="grid-projetos" style="display: none;">
                 <!-- Perguntas e Respostas renderizadas aqui -->
@@ -194,36 +217,85 @@
     <!-- ======== ÁREA DE LOGIN/REGISTRO ======== -->
     <section class="spa-section" id="login" style="display: none;">
         <div class="container auth-container">
-            <div class="window-pane auth-box" style="width: 100%; max-width: 450px;" tabindex="0">
+            <div class="window-pane auth-box">
                 <div class="window-header">
                     <div class="window-controls">
+<<<<<<< HEAD
                         <span class="control-dot close" role="button" tabindex="0" aria-label="Fechar janela"></span>
                         <span class="control-dot minimize" role="button" tabindex="0" aria-label="Minimizar janela"></span>
                         <span class="control-dot maximize" role="button" tabindex="0" aria-label="Maximizar janela"></span>
+=======
+                        <span class="control-dot close" title="Fechar"></span>
+                        <span class="control-dot minimize" title="Minimizar"></span>
+                        <span class="control-dot maximize" title="Maximizar"></span>
                     </div>
-                    <span class="window-title">user_auth.exe</span>
+                    <div class="window-title-badge">
+                        <span class="window-title">user_auth.exe</span>
+>>>>>>> 9e4d092188f673492f3710a7859ed9ceaa11e8dd
+                    </div>
                 </div>
                 <div class="window-body">
+<<<<<<< HEAD
                     <h2 id="auth-title" style="margin-bottom: 2rem; font-size: 2.2rem; text-align: center;">Login</h2>
                     <form id="auth-form">
                         <!-- Honeypot anti-spam -->
                         <div style="display: none !important;">
                             <input type="text" id="auth-honeypot" tabindex="-1" autocomplete="off">
                         </div>
+=======
+                    <h2 id="auth-title">Acessar conta</h2>
+
+                    <!-- Banner de verificação de e-mail -->
+                    <div class="auth-verify-banner" id="auth-verify-banner">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00df76" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg>
+                        <p>
+                            <strong>Verifique seu e-mail</strong>
+                            Um link de confirmação foi enviado. Não recebeu?
+                            <a href="#" id="auth-resend-verify">Reenviar e-mail</a>.
+                        </p>
+                    </div>
+
+                    <form id="auth-form" novalidate>
+>>>>>>> 9e4d092188f673492f3710a7859ed9ceaa11e8dd
                         <div class="input-group" id="name-group" style="display: none;">
-                            <label>Nome</label>
-                            <input type="text" id="auth-nome" placeholder="Seu nome">
+                            <label for="auth-nome">Nome</label>
+                            <input type="text" id="auth-nome" placeholder="Seu nome completo">
                         </div>
                         <div class="input-group">
-                            <label>E-mail</label>
-                            <input type="email" id="auth-email" required placeholder="admin@exemplo.com">
+                            <label for="auth-email">E-mail</label>
+                            <input type="email" id="auth-email" required autocomplete="email" placeholder="E-mail">
                         </div>
                         <div class="input-group">
-                            <label>Senha</label>
-                            <input type="password" id="auth-senha" minlength="8" required placeholder="mínimo 8 caracteres">
+                            <label for="auth-senha">Senha</label>
+                            <input type="password" id="auth-senha" minlength="8" required
+                                autocomplete="current-password" placeholder="Senha">
                         </div>
+
+                        <!-- Link Esqueci minha senha (só visível no modo Login) -->
+                        <div class="auth-forgot" id="auth-forgot-wrap">
+                            <a href="#" id="auth-forgot-link">Esqueci minha senha</a>
+                        </div>
+
+                        <!-- Captcha matemático -->
+                        <div class="input-group" id="captcha-group">
+                            <label>Verificação de Segurança</label>
+                            <div class="auth-captcha">
+                                <span class="captcha-question" id="captcha-question">3 + 7 = ?</span>
+                                <input type="number" id="captcha-answer" class="captcha-input" placeholder="Resposta"
+                                    autocomplete="off" required>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn-primary w-100" id="auth-submit">Entrar</button>
-                        <p class="auth-switch">Não tem conta? <a href="#" id="toggle-auth">Cadastre-se</a></p>
+
+                        <p class="auth-switch">
+                            <span id="auth-switch-label">Não tem conta?</span>
+                            <a href="#" id="toggle-auth">Cadastre-se</a>
+                        </p>
                     </form>
                 </div>
             </div>
@@ -267,7 +339,7 @@
     <!-- ======== PAINEL ADMINISTRATIVO ======== -->
     <section class="spa-section" id="admin" style="display: none;">
         <div class="container">
-            <h2 class="section-title">Painel <span class="accent">Admin</span></h2>
+            <h2 class="section-title">Painel <span class="accent">Administrativo</span></h2>
 
             <div class="admin-tabs">
                 <button class="btn-primary tab-btn active" data-tab="admin-projetos">Projetos</button>
@@ -301,7 +373,7 @@
                         <div style="display: flex; gap: 1rem;">
                             <button type="submit" class="btn-primary" id="proj-btn-submit">Salvar Projeto</button>
                             <button type="button" class="btn-secondary" id="proj-btn-cancelar" style="display: none;"
-                                onclick="window.cancelarEdicao()">Cancelar Edição</button>
+                                >Cancelar Edição</button>
                         </div>
                     </form>
 
@@ -336,7 +408,7 @@
                         <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                             <button type="submit" class="btn-primary" id="cert-btn-submit">Salvar Certificado</button>
                             <button type="button" class="btn-secondary" id="cert-btn-cancelar" style="display: none;"
-                                onclick="window.cancelarEdicaoCertificado()">Cancelar Edição</button>
+                                >Cancelar Edição</button>
                         </div>
                     </form>
 
@@ -362,7 +434,7 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>E-mail</th>
-                                    <th>Role</th>
+                                    <th>Perfil</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -388,6 +460,7 @@
             </div>
         </div>
     </section>
+    </main>
     <footer class="footer" id="contato">
         <div class="container footer-content reveal">
             <h2>Pronto para o <span class="accent">próximo desafio?</span></h2>
@@ -395,7 +468,7 @@
             <p class="highlight-text">vamos conversar.</p>
 
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/emilio-tahara-b5970b313/" class="social-btn" target="_blank"
+                <a href="https://www.linkedin.com/in/emilio-tahara-b5970b313/" class="social-btn" target="_blank" rel="noopener noreferrer"
                     aria-label="LinkedIn">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -405,7 +478,11 @@
                     </svg>
                     LinkedIn
                 </a>
+<<<<<<< HEAD
                 <a href="#" class="social-btn" target="_blank" aria-label="GitHub">
+=======
+                <a href="https://github.com/yTAHARA1/" class="social-btn" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+>>>>>>> 9e4d092188f673492f3710a7859ed9ceaa11e8dd
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path
@@ -414,7 +491,7 @@
                     </svg>
                     GitHub
                 </a>
-                <a href="mailto: emilio.tahara01@gmail.com" class="social-btn" aria-label="Email">
+                <a href="mailto:emilio.tahara01@gmail.com" class="social-btn" aria-label="Email">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -422,7 +499,7 @@
                     </svg>
                     Email
                 </a>
-                <a href="https://www.instagram.com/tahara_tt/" class="social-btn" target="_blank"
+                <a href="https://www.instagram.com/tahara_tt/" class="social-btn" target="_blank" rel="noopener noreferrer"
                     aria-label="Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -440,8 +517,8 @@
         </div>
     </footer>
 
-    <script src="script.js?v=4"></script>
-    <script type="module" src="app.js?v=4"></script>
+    <script src="script.js?v=5"></script>
+    <script type="module" src="app.js?v=6"></script>
 </body>
 
 </html>

@@ -27,10 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetElement = document.querySelector(this.getAttribute('href'));
+            const target = this.getAttribute('href');
+            if (!target || target === '#') return;
+
+            const targetElement = document.querySelector(target);
 
             if (targetElement) {
+                e.preventDefault();
                 targetElement.scrollIntoView({
                     behavior: 'smooth'
                 });
@@ -166,18 +169,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+<<<<<<< HEAD
     // ====== WINDOW CONTROL ACTIONS ======
     const handleWindowControl = (action, pane) => {
         if (!pane) return;
         if (action === "close") {
+=======
+    // ====== WINDOW CONTROL ACTIONS (CLOSE DOT & ESCAPE) ======
+    document.querySelectorAll(".control-dot").forEach((dot) => {
+        const isCloseAction = dot.classList.contains("close") && dot.closest(".spa-section");
+        if (isCloseAction) {
+            dot.setAttribute("role", "button");
+            dot.setAttribute("tabindex", "0");
+            dot.setAttribute("aria-label", "Fechar painel");
+            dot.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    dot.click();
+                }
+            });
+        } else {
+            dot.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("close") && e.target.closest(".window-pane")) {
+            const pane = e.target.closest(".window-pane");
+>>>>>>> 9e4d092188f673492f3710a7859ed9ceaa11e8dd
             const parentSection = pane.closest(".spa-section");
-            if (parentSection) {
+            if (parentSection && ["login", "admin", "perguntas"].includes(parentSection.id)) {
                 parentSection.style.display = "none";
                 window.location.hash = "home";
                 const homeSec = document.getElementById("home");
                 if (homeSec) homeSec.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                pane.style.display = "none";
             }
         } else if (action === "minimize") {
             pane.classList.toggle("minimized");
