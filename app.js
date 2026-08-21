@@ -3,9 +3,10 @@ import {
     escapeHTML,
     firebaseErrorMessage,
     formatFirestoreDate,
+    passwordPolicyMessage,
     questionStatusLabel,
     sanitizePublicUrl
-} from "./security-utils.js?v=1";
+} from "./security-utils.js?v=2";
 import { siteAlert, siteConfirm } from "./ui-dialog.js?v=2";
 import { 
     createUserWithEmailAndPassword, 
@@ -14,7 +15,8 @@ import {
     signOut, 
     onAuthStateChanged,
     sendEmailVerification,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    validatePassword
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import { 
     collection, 
@@ -230,6 +232,26 @@ const authForgotWrap    = document.getElementById("auth-forgot-wrap");
 const authForgotLink    = document.getElementById("auth-forgot-link");
 const authResendVerify  = document.getElementById("auth-resend-verify");
 const authPassword      = document.getElementById("auth-senha");
+const passwordRequirements = document.getElementById("password-requirements");
+
+function updatePasswordRequirements() {
+    if (!authPassword || !passwordRequirements) return;
+
+    const value = authPassword.value;
+    const rules = {
+        length: value.length >= 12,
+        uppercase: /[A-Z]/.test(value),
+        lowercase: /[a-z]/.test(value),
+        number: /[0-9]/.test(value),
+        symbol: /[^A-Za-z0-9]/.test(value)
+    };
+
+    passwordRequirements.querySelectorAll("[data-password-rule]").forEach((item) => {
+        item.classList.toggle("complete", Boolean(rules[item.dataset.passwordRule]));
+    });
+}
+
+authPassword?.addEventListener("input", updatePasswordRequirements);
 
 // ---- Alternar Login / Cadastro ----
 toggleAuth.addEventListener("click", (e) => {
@@ -244,6 +266,10 @@ toggleAuth.addEventListener("click", (e) => {
         toggleAuth.innerText = "Entrar";
         if (authForgotWrap) authForgotWrap.style.display = "none";
         authPassword?.setAttribute("autocomplete", "new-password");
+        authPassword?.setAttribute("minlength", "12");
+        authPassword?.setAttribute("aria-describedby", "password-requirements");
+        if (passwordRequirements) passwordRequirements.hidden = false;
+        updatePasswordRequirements();
     } else {
         authTitle.innerText = "Acessar conta";
         authSubmit.innerText = "Entrar";
@@ -252,6 +278,9 @@ toggleAuth.addEventListener("click", (e) => {
         toggleAuth.innerText = "Cadastre-se";
         if (authForgotWrap) authForgotWrap.style.display = "";
         authPassword?.setAttribute("autocomplete", "current-password");
+        authPassword?.setAttribute("minlength", "8");
+        authPassword?.removeAttribute("aria-describedby");
+        if (passwordRequirements) passwordRequirements.hidden = true;
     }
 });
 
@@ -317,6 +346,16 @@ authForm.addEventListener("submit", async (e) => {
             const nome = document.getElementById("auth-nome").value.trim();
             if (!nome) {
                 await siteAlert("O nome é obrigatório para cadastro.", { tone: "warning" });
+                return;
+            }
+
+            const passwordStatus = await validatePassword(auth, senha);
+            if (!passwordStatus.isValid) {
+                await siteAlert(passwordPolicyMessage(passwordStatus), {
+                    tone: "warning",
+                    title: "Senha ainda não está segura"
+                });
+                authPassword?.focus();
                 return;
             }
 

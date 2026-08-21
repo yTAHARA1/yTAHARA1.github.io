@@ -5,6 +5,7 @@ import {
     escapeHTML,
     firebaseErrorMessage,
     formatFirestoreDate,
+    passwordPolicyMessage,
     questionStatusLabel,
     sanitizePublicUrl
 } from "../security-utils.js";
@@ -31,6 +32,23 @@ test("erros do Firebase não expõem mensagens internas em inglês", () => {
         firebaseErrorMessage({ code: "auth/erro-desconhecido", message: "Internal implementation detail" }, "Falha segura."),
         "Falha segura."
     );
+    assert.match(
+        firebaseErrorMessage({ code: "auth/password-does-not-meet-requirements" }),
+        /12 caracteres/
+    );
+});
+
+test("política de senha informa somente os requisitos ausentes", () => {
+    const message = passwordPolicyMessage({
+        passwordPolicy: { customStrengthOptions: { minPasswordLength: 12 } },
+        meetsMinPasswordLength: false,
+        containsUppercaseLetter: false,
+        containsLowercaseLetter: true,
+        containsNumericCharacter: true,
+        containsNonAlphanumericCharacter: false
+    });
+
+    assert.equal(message, "Sua senha precisa ter pelo menos 12 caracteres, uma letra maiúscula e um símbolo.");
 });
 
 test("datas e status são apresentados em português", () => {

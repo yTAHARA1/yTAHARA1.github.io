@@ -908,6 +908,55 @@ main > section:not(.hero),
     box-shadow: 0 0 10px rgba(0, 223, 118, 0.4) !important;
 }
 
+.password-requirements {
+    margin-top: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(0, 223, 118, 0.18);
+    border-radius: 8px;
+    background: rgba(0, 223, 118, 0.035);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.password-requirements[hidden] {
+    display: none;
+}
+
+.password-requirements p {
+    margin: 0 0 0.55rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
+.password-requirements ul {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.password-requirements li {
+    color: #8b919d;
+    font-size: 0.74rem;
+    line-height: 1.35;
+}
+
+.password-requirements li::before {
+    content: "○";
+    display: inline-block;
+    width: 1.2rem;
+    color: #727885;
+}
+
+.password-requirements li.complete {
+    color: #00df76;
+}
+
+.password-requirements li.complete::before {
+    content: "✓";
+    color: #00df76;
+}
+
 /* Autofill styling override */
 .auth-box .input-group input:-webkit-autofill,
 .auth-box .input-group input:-webkit-autofill:hover,

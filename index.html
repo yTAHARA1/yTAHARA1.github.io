@@ -40,7 +40,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=13">
+    <link rel="stylesheet" href="styles.css?v=14">
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -330,6 +330,16 @@
                             <label for="auth-senha">Senha</label>
                             <input type="password" id="auth-senha" minlength="8" required
                                 autocomplete="current-password" placeholder="Senha">
+                            <div class="password-requirements" id="password-requirements" hidden>
+                                <p>Use uma senha com:</p>
+                                <ul aria-label="Requisitos da senha">
+                                    <li data-password-rule="length">12 ou mais caracteres</li>
+                                    <li data-password-rule="uppercase">Uma letra maiúscula</li>
+                                    <li data-password-rule="lowercase">Uma letra minúscula</li>
+                                    <li data-password-rule="number">Um número</li>
+                                    <li data-password-rule="symbol">Um símbolo</li>
+                                </ul>
+                            </div>
                         </div>
 
                         <!-- Link Esqueci minha senha (só visível no modo Login) -->
@@ -557,7 +567,7 @@
     </footer>
 
     <script src="script.js?v=5"></script>
-    <script type="module" src="app.js?v=10"></script>
+    <script type="module" src="app.js?v=11"></script>
 </body>
 
 </html>
